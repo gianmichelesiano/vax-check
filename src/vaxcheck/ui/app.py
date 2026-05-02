@@ -24,6 +24,10 @@ from vaxcheck.domain.knowledge import KnowledgeBase
 from vaxcheck.domain.person import ClinicalCondition, Person, Sex
 from vaxcheck.domain.vaccination import VaccinationRecord
 from vaxcheck.kb.loader import load_knowledge_base
+from vaxcheck.persistence.mappers import person_to_domain, record_to_domain
+from vaxcheck.persistence.repository import PatientRepository, RecordRepository, ReportRepository
+from vaxcheck.persistence.session import get_engine as _get_db_engine
+from vaxcheck.persistence.session import init_db as _init_db
 from vaxcheck.rule_engine.deterministic.engine import DeterministicRuleEngine
 
 # ──────────────────────────────────────────────────────────
@@ -80,10 +84,121 @@ def _init_session() -> None:
         "pt_notes": "",
         "pt_eval_date": today,
         "demo_selector": "Nessuno",
+        # Persistence
+        "db_initialized": False,
+        "current_patient_id": None,
+        "patient_list": [],
     }
     for key, val in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = val
+
+
+# ──────────────────────────────────────────────────────────
+# Persistence Helpers
+# ──────────────────────────────────────────────────────────
+
+@st.cache_resource
+def _cached_engine():
+    _init_db()
+    return _get_db_engine()
+
+
+def _get_db_session():
+    from sqlalchemy.orm import Session
+    return Session(bind=_cached_engine())
+
+
+def _refresh_patient_list() -> None:
+    session = _get_db_session()
+    try:
+        repo = PatientRepository(session)
+        st.session_state.patient_list = repo.list_all()
+    finally:
+        session.close()
+
+
+def _save_current_patient(person: Person, records: list[VaccinationRecord]) -> str | None:
+    session = _get_db_session()
+    try:
+        patient_repo = PatientRepository(session)
+        record_repo = RecordRepository(session)
+        db_patient = patient_repo.save(person, st.session_state.current_patient_id)
+        session.flush()
+        record_repo.replace_all_for_patient(db_patient.id, records)
+        session.commit()
+        st.session_state.current_patient_id = db_patient.id
+        _refresh_patient_list()
+        return db_patient.id
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+def _save_report(person: Person, records: list[VaccinationRecord], report: ComplianceReport) -> None:
+    # Ensure patient and records are saved first
+    patient_id = _save_current_patient(person, records)
+    if patient_id is None:
+        return
+    session = _get_db_session()
+    try:
+        report_repo = ReportRepository(session)
+        report_repo.save(report, patient_id)
+        report_repo.delete_older_than(patient_id, keep_count=20)
+        session.commit()
+    except Exception:
+        session.rollback()
+    finally:
+        session.close()
+
+
+def _load_patient(patient_id: str) -> None:
+    session = _get_db_session()
+    try:
+        patient_repo = PatientRepository(session)
+        record_repo = RecordRepository(session)
+        db_patient = patient_repo.get(patient_id)
+        if db_patient is None:
+            st.error("Paziente non trovato nel database.")
+            return
+        person = person_to_domain(db_patient)
+        db_records = record_repo.list_for_patient(patient_id)
+        records = [record_to_domain(r) for r in db_records]
+
+        st.session_state.pt_name = person.given_name
+        st.session_state.pt_surname = person.family_name
+        st.session_state.pt_birth = person.birth_date
+        st.session_state.pt_sex = [Sex.FEMALE, Sex.MALE, Sex.OTHER].index(person.sex)
+        st.session_state.pt_conditions = [c.code for c in person.clinical_conditions]
+        st.session_state.pt_occupations = list(person.occupational_situations)
+        st.session_state.pt_notes = person.notes or ""
+        st.session_state.records = records
+        st.session_state.current_patient_id = patient_id
+        st.session_state.demo_selector = "Nessuno"
+    finally:
+        session.close()
+
+
+def _delete_patient(patient_id: str) -> None:
+    session = _get_db_session()
+    try:
+        repo = PatientRepository(session)
+        repo.delete(patient_id)
+        session.commit()
+        if st.session_state.current_patient_id == patient_id:
+            st.session_state.current_patient_id = None
+            st.session_state.pt_name = ""
+            st.session_state.pt_surname = ""
+            st.session_state.records = []
+            st.session_state.report = None
+        _refresh_patient_list()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 
 # ──────────────────────────────────────────────────────────
@@ -152,6 +267,40 @@ def _render_patient_form() -> Person | None:
                          disabled=(demo_options[selected_demo_label] is None)):
         _load_demo(demo_options[selected_demo_label])
         st.rerun()
+
+    # ── Saved Patients ──
+    st.sidebar.divider()
+    st.sidebar.header("💾 Pazienti Salvati")
+
+    if st.sidebar.button("🔄 Aggiorna lista", type="secondary", use_container_width=True):
+        _refresh_patient_list()
+        st.rerun()
+
+    if not st.session_state.patient_list:
+        st.sidebar.caption("Nessun paziente salvato.")
+    else:
+        patient_options = {
+            f"{p.family_name} {p.given_name} ({p.birth_date.strftime('%d.%m.%Y')})": p.id
+            for p in st.session_state.patient_list
+        }
+        selected_label = st.sidebar.selectbox(
+            "Seleziona paziente salvato",
+            options=["—"] + list(patient_options.keys()),
+            key="patient_selector",
+        )
+        col_load, col_del = st.sidebar.columns(2)
+        with col_load:
+            if st.button("📂 Carica", type="primary", use_container_width=True,
+                         disabled=(selected_label == "—")):
+                _load_patient(patient_options[selected_label])
+                st.rerun()
+        with col_del:
+            if st.button("🗑️ Elimina", type="secondary", use_container_width=True,
+                         disabled=(selected_label == "—")):
+                _delete_patient(patient_options[selected_label])
+                st.rerun()
+
+    st.sidebar.divider()
 
     given_name = st.sidebar.text_input("Nome", key="pt_name", placeholder="es. Clara")
     family_name = st.sidebar.text_input("Cognome", key="pt_surname", placeholder="es. Siano")
@@ -231,7 +380,7 @@ def _render_patient_form() -> Person | None:
         st.sidebar.warning("Inserire nome e cognome del paziente")
         return None
 
-    return Person(
+    person = Person(
         given_name=given_name.strip(),
         family_name=family_name.strip(),
         birth_date=birth_date,
@@ -240,6 +389,16 @@ def _render_patient_form() -> Person | None:
         occupational_situations=occupational,
         notes=notes.strip() or None,
     )
+
+    # Save button
+    if st.sidebar.button("💾 Salva Paziente", type="primary", use_container_width=True):
+        try:
+            patient_id = _save_current_patient(person, st.session_state.records)
+            st.sidebar.success(f"Paziente salvato con successo (ID: {patient_id[:8]}...)")
+        except Exception as exc:
+            st.sidebar.error(f"Errore durante il salvataggio: {exc}")
+
+    return person
 
 
 # ──────────────────────────────────────────────────────────
@@ -616,6 +775,12 @@ def _demo_giovanni() -> None:
 def main() -> None:
     _init_session()
 
+    # Initialize DB (once)
+    if not st.session_state.db_initialized:
+        _cached_engine()
+        _refresh_patient_list()
+        st.session_state.db_initialized = True
+
     st.title("💉 VaxCheck")
     st.caption("Analisi di conformità al calendario vaccinale svizzero UFSP 2026")
 
@@ -652,6 +817,11 @@ def main() -> None:
             eval_date = st.session_state.get("_eval_date", date.today())
             report = _run_analysis(person, st.session_state.records, eval_date)
             st.session_state.report = report
+        # Auto-save report (and patient/records if needed)
+        try:
+            _save_report(person, st.session_state.records, report)
+        except Exception as exc:
+            st.warning(f"Salvataggio automatico report non riuscito: {exc}")
 
     # Display report
     if st.session_state.report:

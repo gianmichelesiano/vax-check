@@ -6,11 +6,13 @@ dist/
 build/
 *.egg
 z_notes.txt
+docs/
 
 # Virtual environment
 .venv/
 venv/
 env/
+
 
 # Environment & secrets
 .env
@@ -37,3 +39,4 @@ Thumbs.db
 
 # Project (generated files at runtime)
 *.log
+*.db

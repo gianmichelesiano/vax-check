@@ -1,0 +1,26 @@
+{
+  "person": {
+    "given_name": "Clara",
+    "family_name": "Siano",
+    "birth_date": "2018-01-15",
+    "sex": "F",
+    "clinical_conditions": [],
+    "occupational_situations": []
+  },
+  "records": [
+    {"product_name": "Infanrix hexa", "administration_date": "2018-03-21"},
+    {"product_name": "Prevenar 13", "administration_date": "2018-03-21"},
+    {"product_name": "Infanrix hexa", "administration_date": "2018-05-24"},
+    {"product_name": "Prevenar 13", "administration_date": "2018-05-24"},
+    {"product_name": "Infanrix hexa", "administration_date": "2018-07-12"},
+    {"product_name": "Priorix-Tetra", "administration_date": "2018-11-05"},
+    {"product_name": "Priorix-Tetra", "administration_date": "2019-02-04"},
+    {"product_name": "Prevenar 13", "administration_date": "2019-02-04"},
+    {"product_name": "Infanrix hexa", "administration_date": "2019-10-15"},
+    {"product_name": "Menveo", "administration_date": "2020-02-11"},
+    {"product_name": "Adacel-Polio", "administration_date": "2024-04-23"},
+    {"product_name": "FSME-Immun Junior", "administration_date": "2024-04-23"},
+    {"product_name": "FSME-Immun Junior", "administration_date": "2024-05-10"},
+    {"product_name": "FSME-Immun Junior", "administration_date": "2024-11-11"}
+  ]
+}

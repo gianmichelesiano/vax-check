@@ -1,0 +1,530 @@
+# Calendario vaccinale svizzero 2026 - Regole strutturate
+# Fonte: UFSP/CFV, febbraio 2026
+# Documento di riferimento: Calendario_vaccinale_svizzero_2026_IT
+#
+# Convenzioni:
+#   recommendation_level:
+#     - base: vaccinazione di base (salute individuale + pubblica)
+#     - complementary: complementare (protezione individuale)
+#     - risk_group: solo per gruppi/situazioni a rischio
+#   age expressed as: months (m) or years (y)
+#   intervals in days unless specified
+
+metadata:
+  version: "2026.1"
+  source: "UFSP/CFV - Calendario vaccinale svizzero 2026"
+  publication_date: "2026-02-01"
+  language: "it"
+  reference_url: "https://www.bag.admin.ch/calendariovaccinale"
+
+# ═══════════════════════════════════════════════════════════════
+# VACCINAZIONI DI BASE E COMPLEMENTARI PER ANTIGENE
+# ═══════════════════════════════════════════════════════════════
+
+antigens:
+
+  # ──────────── DIFTERITE-TETANO-PERTOSSE ────────────
+  DTP:
+    full_name: "Difterite, Tetano, Pertosse"
+    recommendation_level: base
+    chapter_ref: "1.1.b/c, 1.2.a, 1.3.a, 1.4.a, 1.5.a"
+
+    primary_schedule:
+      birth_year_from: 2019
+      schema_name: "2+1"
+      doses:
+        - { age_months: 2, antigen_form: "DTPa", combo: "DTPa-IPV-Hib-HBV" }
+        - { age_months: 4, antigen_form: "DTPa", combo: "DTPa-IPV-Hib-HBV" }
+        - { age_months: 12, antigen_form: "DTPa", combo: "DTPa-IPV-Hib-HBV", min_interval_after_prev_days: 180 }
+      min_age_first_dose_weeks: 8
+      max_age_to_complete_months: 13
+
+    legacy_schedule:
+      birth_year_until: 2018
+      schema_name: "3+1"
+      doses_total: 4
+      counts_as_complete: true
+      note: "Lattanti vaccinati 2-4-6 mesi + richiamo 12-24 mesi"
+
+    boosters:
+      - { age_years: [4, 7], antigen_form: "DTPa or dTpa", combo: "DTPa-IPV or dTpa-IPV", note: "Richiamo prescolare" }
+      - { age_years: [11, 15], antigen_form: "dTpa", note: "Richiamo adolescenti" }
+      - { age_years: 25, antigen_form: "dTpa", note: "Unica dose pertosse adulti raccomandata" }
+      - { age_years: 45, antigen_form: "dT", note: "Vaccino dT non disponibile - usare dTpa o dT-IPV" }
+      - { age_years: 65, antigen_form: "dT" }
+      - { age_years_from: 65, every_years: 10, antigen_form: "dT" }
+
+    booster_intervals:
+      adult_25_64_years: 20
+      adult_65_plus_years: 10
+      immunocompromised: 10
+      risk_situation: "shorter intervals possible (diphtheria endemic travel, etc.)"
+
+    catchup_rules:
+      reference_table: "Tabella 2, 3, 4"
+      principle: "Mai ricominciare da zero; calcolare dose mancanti in base a età ed antigene già ricevuto"
+
+  # ──────────── POLIOMIELITE ────────────
+  IPV:
+    full_name: "Poliomielite inattivata"
+    recommendation_level: base
+    chapter_ref: "1.1.d, 1.2.a"
+
+    primary_schedule:
+      birth_year_from: 2019
+      schema_name: "2+1"
+      doses:
+        - { age_months: 2 }
+        - { age_months: 4 }
+        - { age_months: 12 }
+      min_age_first_dose_weeks: 8
+
+    boosters:
+      - { age_years: [4, 7], note: "Inclusa nel richiamo DTPa-IPV" }
+      - { age_years: [11, 15], note: "Inclusa nel richiamo dTpa-IPV" }
+
+    completion_criteria:
+      schema_2plus1: { total_doses: 4, doses_after_age_1: 2 }
+      schema_3plus1: { total_doses: 5, doses_after_age_1: 2 }
+      adult_minimum: 3
+
+    additional_boosters:
+      indication: "Solo se rischio di esposizione (viaggi in paesi endemici, lavoro con poliovirus)"
+      interval_years: 10
+
+  # ──────────── HAEMOPHILUS INFLUENZAE B ────────────
+  Hib:
+    full_name: "Haemophilus influenzae tipo b"
+    recommendation_level: base
+    chapter_ref: "1.1.e"
+
+    primary_schedule:
+      doses:
+        - { age_months: 2 }
+        - { age_months: 4 }
+        - { age_months: 12 }
+
+    catchup:
+      max_age_months: 60
+      window_closes_at: "5° compleanno"
+      schedule_by_age:
+        - { age_range_months: [3, 5], doses: 3, intervals_months: [2, 6] }
+        - { age_range_months: [6, 11], doses: 3, intervals_months: [1, 6] }
+        - { age_range_months: [12, 14], doses: 2, interval_months: 2 }
+        - { age_range_months: [15, 59], doses: 1 }
+      after_age: "Non più indicata (immunità naturale)"
+
+  # ──────────── EPATITE B ────────────
+  HBV:
+    full_name: "Epatite B"
+    recommendation_level: base
+    chapter_ref: "1.1.f, 1.3.b, 3.1.c"
+
+    primary_schedule:
+      preferred_age: "lattanti"
+      doses:
+        - { age_months: 2 }
+        - { age_months: 4 }
+        - { age_months: 12 }
+      combo: "DTPa-IPV-Hib-HBV (esavalente)"
+
+    adolescent_schedule:
+      age_range_years: [11, 15]
+      schema_options:
+        - { name: "pediatric_3dose", doses: 3, intervals_months: [1, 5] }
+        - { name: "adult_2dose", doses: 2, intervals_months: [4, 6], note: "Vaccino dosaggio adulto" }
+
+    adult_schedule:
+      age_min_years: 16
+      doses: 3
+      intervals_months: [1, 5]
+      indication: "Solo se rischio di esposizione (vedi capitolo 3.1.c)"
+
+    risk_groups: "Vedi capitolo 3.1.c"
+
+    special_cases:
+      mother_HBsAg_positive:
+        doses: 4
+        schedule: [
+          { age_days: 0, with_HBIgG: true, vaccine_type: "monovalente" },
+          { age_months: 1, vaccine_type: "monovalente" },
+          { age_months: 2, vaccine_type: "esavalente" },
+          { age_months: 12, vaccine_type: "esavalente" }
+        ]
+        post_vaccination_serology_required: true
+        serology_test: "anti-HBs + HBsAg a 4 settimane dall'ultima dose"
+
+  # ──────────── PNEUMOCOCCO ────────────
+  PCV_pediatric:
+    full_name: "Pneumococchi (bambini)"
+    recommendation_level: base
+    chapter_ref: "1.1.g, 3.1.h"
+
+    primary_schedule:
+      doses:
+        - { age_months: 2 }
+        - { age_months: 4 }
+        - { age_months: 12 }
+      schema: "2+1"
+
+    recommended_products_2026:
+      age_under_5: ["PCV13", "PCV15"]
+      age_5_to_17: ["PCV15", "PCV20"]
+      note: "PCV20 NON raccomandato per schema 2+1 lattanti senza fattori di rischio"
+
+    catchup:
+      max_age: "5° compleanno"
+      schedule_by_age:
+        - { age_range_months: [3, 5], doses: 3, intervals_months: [2, 6] }
+        - { age_range_months: [6, 11], doses: 3, intervals_months: [1, 6] }
+        - { age_range_months: [12, 23], doses: 2, interval_months: 2 }
+        - { age_range_months: [24, 59], doses: 1 }
+      after_age: "Solo se gruppo a rischio (vedi 3.1.h)"
+
+  PCV_adult:
+    full_name: "Pneumococchi (adulti ≥65)"
+    recommendation_level: complementary
+    chapter_ref: "1.5.d"
+
+    age_min_years: 65
+    schedule:
+      not_previously_vaccinated:
+        doses: 1
+        recommended_products: ["PCV20", "PCV21"]
+      previously_PCV13_only:
+        doses: 1
+        recommended_products: ["PCV20", "PCV21"]
+        min_interval_years_from_PCV13: 1
+      previously_PCV15_only:
+        doses: 1
+        recommended_products: ["PCV21"]
+        min_interval_years_from_PCV15: 1
+      previously_PPV23_only:
+        doses: 1
+        recommended_products: ["PCV20", "PCV21"]
+        min_interval_years_from_PPV23: 1
+      already_higher_valence_at_65plus:
+        doses: 0
+        note: "Nessuna dose ulteriore"
+
+  # ──────────── ROTAVIRUS ────────────
+  RV:
+    full_name: "Rotavirus"
+    recommendation_level: complementary
+    chapter_ref: "1.1.h"
+
+    primary_schedule:
+      doses: 2
+      doses_detail:
+        - { age_months: 2 }
+        - { age_months: 4 }
+      min_age_weeks_first_dose: 6
+      max_age_weeks_first_dose: 15.86  # 15 settimane e 6 giorni
+      max_age_weeks_last_dose: 23.86
+      min_interval_weeks: 4
+      contraindicated_after_weeks: 24
+      route: "orale"
+
+  # ──────────── MORBILLO-OREChIONI-ROSOLIA ────────────
+  MOR:
+    full_name: "Morbillo, Orecchioni, Rosolia"
+    recommendation_level: base
+    chapter_ref: "1.1.k"
+
+    primary_schedule:
+      doses: 2
+      doses_detail:
+        - { age_months: 9 }
+        - { age_months: 12 }
+      preferred_combo: "MORV (con varicella)"
+      min_interval_weeks: 4
+
+    early_vaccination:
+      indication: "Esposizione a caso di morbillo, focolaio epidemico, viaggio in zona endemica"
+      min_age_months: 6
+      note: "Dosi <9 mesi non contano - serve dose extra a 9 mesi"
+
+    catchup:
+      target: "Tutte le persone nate dopo il 1963"
+      doses_needed: 2
+      min_interval_weeks: 4
+      no_serology_required: true
+      pre_1964_born: "Probabilmente immuni - nessuna vaccinazione necessaria"
+
+    contraindications:
+      - "Gravidanza (vaccino vivo)"
+      - "Immunodeficienza cellulare"
+
+  # ──────────── VARICELLA ────────────
+  V:
+    full_name: "Varicella (VZV)"
+    recommendation_level: base
+    chapter_ref: "1.1.l, 3.1.n"
+
+    primary_schedule:
+      from_birth_year: 2023
+      doses: 2
+      doses_detail:
+        - { age_months: 9 }
+        - { age_months: 12 }
+      preferred_combo: "MORV"
+      min_interval_weeks: 4
+
+    catchup:
+      age_under_40: "Raccomandato per non vaccinati senza anamnesi varicella"
+      age_40_plus: "Solo se gruppo a rischio (vedi 3.1.n)"
+      doses_if_never_vaccinated: 2
+      doses_if_one_previous: 1
+      min_interval_weeks: 4
+      serology_indication: "Solo in caso di anamnesi incerta + immunodepressione"
+
+    contraindications:
+      - "Gravidanza (vaccino vivo)"
+      - "Immunodeficienza grave"
+
+  # ──────────── HPV ────────────
+  HPV:
+    full_name: "Papillomavirus umani"
+    recommendation_level: base
+    chapter_ref: "1.3.c, 1.4.b"
+
+    primary_schedule:
+      target_age_years: [11, 14]
+      doses: 2
+      interval_months: 6
+      product: "9-valente (Gardasil 9)"
+      target: "Entrambi i sessi"
+
+    schedule_alternatives:
+      age_15_to_26:
+        doses: 3
+        intervals_months: [2, 6]
+        level: "Recupero (15-19) o complementare (20-26)"
+      immunocompromised_11_to_14:
+        doses: 3
+        intervals_months: [2, 6]
+      after_age_26: "Non più raccomandato di routine"
+
+    catchup_window: "Fino al 20° compleanno (vaccinazione di recupero)"
+
+  # ──────────── MENINGOCOCCO B ────────────
+  MenB:
+    full_name: "Meningococco sierogruppo B"
+    recommendation_level: complementary
+    chapter_ref: "1.1.i, 1.3.d, 3.1.f"
+
+    primary_schedule_infant:
+      doses: 3
+      doses_detail:
+        - { age_months: 3, range: [2, 3] }
+        - { age_months: 5, range: [4, 5] }
+        - { age_months: 15, range: [12, 18] }
+      min_interval_first_two_months: 2
+      min_interval_2nd_3rd_months: 6
+
+    adolescent_schedule:
+      target_age_years: [11, 15]
+      doses: 2
+      min_interval_months: 1
+
+    catchup:
+      infant_to_5y: "Fino al 5° compleanno"
+      adolescent_to_20y: "Fino al 20° compleanno"
+      schedule_by_age:
+        - { age_range_months: [4, 11], doses: 3, intervals_months: [2, 6] }
+        - { age_range_months: [12, 23], doses: 3, intervals_months: [2, 12] }
+        - { age_range_months: [24, 59], doses: 2, interval_months: 1 }
+        - { age_range_years: [16, 19], doses: 2, interval_months: 1 }
+
+  # ──────────── MENINGOCOCCO ACWY ────────────
+  MenACWY:
+    full_name: "Meningococco sierogruppi A, C, W, Y"
+    recommendation_level: complementary
+    chapter_ref: "1.1.j, 1.3.d, 3.1.f"
+
+    primary_schedule_toddler:
+      target_age_months: [12, 18]
+      doses: 1
+      note: "1 o 2 dosi a seconda del vaccino utilizzato"
+
+    adolescent_schedule:
+      target_age_years: [11, 15]
+      doses: 1
+
+    catchup:
+      toddler_to_5y: "Fino al 5° compleanno"
+      adolescent_to_20y: "Fino al 20° compleanno"
+      schedule_by_age:
+        - { age_range_months: [19, 59], doses: "1 or 2 (vaccine-dependent)" }
+        - { age_range_years: [16, 19], doses: 1 }
+
+  # ──────────── FSME / TBE ────────────
+  FSME:
+    full_name: "Meningoencefalite primaverile-estiva (TBE)"
+    recommendation_level: risk_group
+    chapter_ref: "3.1.a"
+
+    indication: "Tutta la Svizzera tranne Ticino è zona a rischio"
+
+    primary_schedule:
+      from_age_years: 3
+      doses: 3
+      schedule_options:
+        standard: { intervals_months: [1, "6-12"] }
+        accelerated: { intervals_days: [14, "5-12 months"] }
+
+    booster:
+      every_years: 10
+
+    pediatric_individual:
+      from_age_years: 1
+      indication: "Rischio elevato di esposizione, valutazione individuale"
+
+  # ──────────── HERPES ZOSTER ────────────
+  HZ:
+    full_name: "Herpes Zoster"
+    recommendation_level: complementary
+    chapter_ref: "1.5.b, 3.1.d"
+
+    primary_schedule:
+      from_age_years: 65
+      doses: 2
+      interval_months: 2
+      product: "Shingrix (subunità adiuvato)"
+
+    risk_group_schedule:
+      from_age_years: 50
+      indication: "Immunodeficienza attuale o futura"
+      doses: 2
+      interval_months: 2
+
+    severe_immunocompromised:
+      from_age_years: 18
+      doses: 2
+      interval_months: "1-2 (idealmente entro 6 mesi)"
+
+  # ──────────── INFLUENZA STAGIONALE ────────────
+  Influenza:
+    full_name: "Influenza stagionale"
+    recommendation_level: complementary
+    chapter_ref: "1.5.c, 3.1.e"
+
+    primary_schedule:
+      from_age_years: 65
+      frequency: "annuale"
+      preferred_period: "metà ottobre - inizio ondata influenzale"
+
+    high_dose_indication:
+      from_age_years: 75
+      or_age_years_with_risk: 65
+      product: "Vaccino ad alto dosaggio (Efluelda)"
+
+    pediatric_first_vaccination:
+      age_range_years: [0.5, 8]
+      doses_first_year: 2
+      interval_weeks: 4
+      doses_subsequent_years: 1
+
+  # ──────────── COVID-19 ────────────
+  COVID:
+    full_name: "SARS-CoV-2"
+    recommendation_level: complementary
+    chapter_ref: "1.5.e, 3.1.k"
+
+    primary_schedule:
+      from_age_years: 65
+      frequency: "annuale, autunno/inverno"
+      doses_per_year: 1
+      min_interval_from_last_dose_or_infection_months: 6
+      preferred_product: "Adattato alle varianti circolanti"
+
+    risk_groups: "Vedi capitolo 3.1.k - dettagliato per patologia"
+
+  # ──────────── RSV (immunizzazione passiva neonati) ────────────
+  RSV_passive:
+    full_name: "Virus respiratorio sinciziale - immunizzazione passiva"
+    recommendation_level: base
+    chapter_ref: "1.1.a"
+
+    strategies:
+      maternal_vaccination:
+        target: "Donne in gravidanza"
+        condition: "Parto previsto ottobre-marzo"
+        product: "Abrysvo"
+        gestational_week_range: [32.0, 36.0]
+        ideal_min_weeks_before_delivery: 5
+        doses: 1
+        repeat_each_pregnancy: false
+
+      monoclonal_antibody:
+        target: "Neonati e lattanti <12 mesi"
+        product: "Nirsevimab (Beyfortus)"
+        timing_by_birth_month:
+          oct_to_mar: "Prima settimana di vita o ASAP"
+          apr_to_sep: "In ottobre o ASAP dopo"
+        catchup_window: "Fino al giorno prima del 1° compleanno"
+        condition_after_maternal_vacc: "Non necessario se vaccinazione materna efficace (>14 giorni prima del parto)"
+
+  # ──────────── PERTOSSE GRAVIDANZA ────────────
+  Pertussis_pregnancy:
+    full_name: "Pertosse in gravidanza (immunizzazione passiva)"
+    recommendation_level: base
+    chapter_ref: "3.1.g"
+
+    schedule:
+      every_pregnancy: true
+      preferred_trimester: 2
+      gestational_week_min: 13
+      product: "dTpa"
+      doses: 1
+      latest_administration: "14 giorni prima del parto"
+      min_interval_from_previous_T: "4 settimane"
+
+# ═══════════════════════════════════════════════════════════════
+# FASCE D'ETÀ - VACCINAZIONI ATTESE
+# Usato per generare il calendario futuro personalizzato
+# ═══════════════════════════════════════════════════════════════
+
+age_milestones:
+  - age_months: 2
+    expected: [DTP, IPV, Hib, HBV, PCV_pediatric, RV, MenB]
+
+  - age_months: 4
+    expected: [DTP, IPV, Hib, HBV, PCV_pediatric, RV, MenB]
+
+  - age_months: 9
+    expected: [MOR, V]
+
+  - age_months: 12
+    expected: [DTP, IPV, Hib, HBV, PCV_pediatric, MOR, V, MenACWY, MenB]
+
+  - age_years: [4, 7]
+    expected: [DTP, IPV]
+    type: "richiamo prescolare"
+
+  - age_years: [11, 15]
+    expected: [DTP, HPV, MenACWY, MenB]
+    optional: [HBV]
+    type: "richiami adolescenti"
+
+  - age_years: 25
+    expected: [DTP]
+    type: "richiamo adulto pertosse"
+
+  - age_years: 45
+    expected: [DTP]  # solo dT
+    type: "richiamo adulto"
+
+  - age_years: 65
+    expected: [DTP, HZ, PCV_adult, Influenza, COVID]
+    type: "vaccinazioni 65+"
+
+  - age_years_from: 65
+    every_years: 10
+    expected: [DTP]
+    type: "richiamo dT periodico"
+
+  - age_years_from: 65
+    every_years: 1
+    expected: [Influenza, COVID]
+    type: "vaccinazioni stagionali annuali"

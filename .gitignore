@@ -40,3 +40,5 @@ Thumbs.db
 # Project (generated files at runtime)
 *.log
 *.db
+node_modules/
+frontend/node_modules/

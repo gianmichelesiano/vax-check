@@ -102,7 +102,7 @@ def _summarize_boosters(antigen_code: str, raw: dict) -> str | None:
         ay = b.get("age_years")
         ayf = b.get("age_years_from")
         ey = b.get("every_years")
-        note = b.get("note", "")
+        note = b.get("notes") or b.get("note", "")
 
         if ay and isinstance(ay, list):
             parts.append(f"{ay[0]}-{ay[1]} anni")
@@ -145,7 +145,7 @@ def _build_risk_groups(raw_risk: dict) -> RiskGroupsOut:
                     label=data.get("label", code),
                     recommended=data.get("recommended", []),
                     severity_threshold=data.get("severity_threshold"),
-                    note=data.get("note"),
+                    note=data.get("notes") or data.get("note"),
                 )
             )
         setattr(out, field, items)

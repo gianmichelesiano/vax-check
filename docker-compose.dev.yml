@@ -10,6 +10,7 @@ services:
       - ./src:/app/src
     environment:
       - DATABASE_URL=sqlite:///./data/vaxcheck.db
+      - KB_LANGUAGE=DE
     command: uvicorn vaxcheck.api.main:app --host 0.0.0.0 --port 8000 --reload
 
   streamlit:

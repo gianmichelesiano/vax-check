@@ -13,7 +13,7 @@ def get_db():
 
 @lru_cache
 def get_kb():
-    return load_knowledge_base(Path("kb"))
+    return load_knowledge_base(Path("kb"))  # language from KB_LANGUAGE env var or "IT"
 
 
 @lru_cache

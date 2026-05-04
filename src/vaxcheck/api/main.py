@@ -20,7 +20,7 @@ def _on_startup():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://localhost:80", "http://localhost:3000"],
+    allow_origins=["http://localhost", "http://localhost:80", "http://localhost:3000", "http://localhost:3001"],
     allow_methods=["*"],
     allow_headers=["*"],
 )

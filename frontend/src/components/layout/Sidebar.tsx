@@ -1,17 +1,25 @@
 'use client'
 
+import { useCallback } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 import useSWR from 'swr'
 import { api } from '@/lib/api'
 import { PatientCard } from '@/components/patients/PatientCard'
 import type { Patient } from '@/lib/types'
 
-interface SidebarProps {
-  onSelect?: (patient: Patient) => void
-  selectedId?: string
-}
+export function Sidebar() {
+  const router = useRouter()
+  const params = useParams()
+  const selectedId = (params?.id as string) ?? null
 
-export function Sidebar({ onSelect, selectedId }: SidebarProps) {
   const { data: patients, isLoading } = useSWR('patients', () => api.patients.list())
+
+  const handleSelect = useCallback(
+    (p: Patient) => {
+      router.push(`/pazienti/${p.id}/`)
+    },
+    [router],
+  )
 
   if (isLoading) {
     return (
@@ -32,7 +40,7 @@ export function Sidebar({ onSelect, selectedId }: SidebarProps) {
           <button
             key={p.id}
             className="w-full text-left"
-            onClick={() => onSelect?.(p)}
+            onClick={() => handleSelect(p)}
           >
             <PatientCard patient={p} compact selected={p.id === selectedId} />
           </button>

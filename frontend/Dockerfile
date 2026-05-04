@@ -1,6 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 ENV NEXT_PUBLIC_API_URL=""
+ENV NEXT_EXPORT=true
 COPY package*.json ./
 RUN npm ci
 COPY . .

@@ -1,13 +1,18 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-ENV NEXT_PUBLIC_API_URL=""
-ENV NEXT_EXPORT=true
+ENV NEXT_PUBLIC_API_PROXY="http://api:8000/api/:path*"
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
-COPY --from=builder /app/out /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+FROM node:20-alpine
+WORKDIR /app
+ENV NEXT_PUBLIC_API_URL=""
+ENV NEXT_PUBLIC_API_PROXY="http://api:8000/api/:path*"
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/next.config.mjs ./
+EXPOSE 3000
+CMD ["npx", "next", "start", "-p", "3000"]

@@ -1,0 +1,318 @@
+# Gruppi a rischio: mapping condizione/situazione → vaccinazioni aggiuntive raccomandate
+# Fonte: Calendario vaccinale svizzero 2026, capitolo 3 + Tabella 5
+#
+# Per il rule engine: dato il profilo del paziente (condizioni/lavoro/viaggi),
+# ritorna l'elenco di vaccinazioni aggiuntive raccomandate oltre quelle per età.
+
+metadata:
+  version: "2026.1"
+  source: "Calendario vaccinale svizzero 2026, capitoli 3.1, 3.2, 3.3"
+
+# ═══════════════════════════════════════════════════════════════
+# RISCHIO PER MALATTIE CRONICHE / FATTORI CLINICI
+# Tabella 5 del calendario
+# ═══════════════════════════════════════════════════════════════
+
+clinical_conditions:
+
+  # ─── Cardiovascolari ───
+  heart_failure:
+    label: "Insufficienza cardiaca"
+    severity_threshold: "NYHA III/IV o peggioramento"
+    recommended: [Influenza, COVID_if_stage, PCV_adult_if_stage]
+
+  cardiopathy:
+    label: "Cardiopatia / malformazione congenita"
+    recommended: [Influenza, COVID_if_stage]
+
+  stroke_or_vasculopathy:
+    label: "Ictus pregresso o vasculopatia sintomatica"
+    recommended: [COVID]
+
+  hypertension_with_target_damage:
+    label: "Ipertensione arteriosa con danno organi bersaglio"
+    recommended: [COVID]
+
+  pulmonary_hypertension:
+    label: "Ipertensione polmonare"
+    recommended: [COVID]
+
+  # ─── Respiratorie ───
+  COPD:
+    label: "Pneumopatia cronica ostruttiva"
+    severity_threshold: "GOLD ≥3 o peggioramento"
+    recommended: [Influenza, COVID_if_stage, PCV_adult_if_stage, HZ_if_stage]
+
+  severe_asthma:
+    label: "Asma severa con corticoidi orali prolungati/frequenti"
+    recommended: [Influenza, COVID, PCV_adult, HZ]
+
+  bronchiectasis_with_antibody_deficiency:
+    label: "Bronchiectasie su carenza di anticorpi"
+    recommended: [Influenza, COVID, PCV_adult]
+
+  other_lung_disease:
+    label: "Altre malattie polmonari (fibrosi, enfisema, asma bronchiale)"
+    recommended: [Influenza, COVID]
+
+  # ─── Fegato ───
+  chronic_liver_disease:
+    label: "Malattia epatica cronica"
+    recommended: [Influenza, HAV, HBV]
+
+  liver_cirrhosis:
+    label: "Cirrosi epatica"
+    recommended: [Influenza, COVID, PCV_adult, HAV, HBV]
+
+  # ─── Milza ───
+  asplenia:
+    label: "Asplenia anatomica o funzionale (incluso anemia falciforme)"
+    recommended: [Influenza, PCV_adult, MenACWY, MenB]
+    note: "Vedi raccomandazioni separate UFSP per asplenia"
+
+  # ─── Rene ───
+  renal_insufficiency:
+    label: "Insufficienza renale"
+    severity_threshold: "stadio 4 (GFR <30 ml/min)"
+    recommended: [Influenza, COVID_if_stage, PCV_adult_if_stage, HZ_if_stage]
+
+  nephrotic_syndrome:
+    label: "Sindrome nefrosica"
+    recommended: [Influenza, PCV_adult]
+
+  dialysis:
+    label: "Dialisi"
+    recommended: [Influenza, COVID, PCV_adult, HBV]
+    note: "HBV con dosaggio dialisi 40µg, schema specifico"
+
+  # ─── Metaboliche ───
+  diabetes_with_organ_impact:
+    label: "Diabete con ripercussioni cardiopolmonari/renali"
+    recommended: [Influenza, COVID, PCV_adult, HZ]
+
+  obesity:
+    label: "Obesità (BMI ≥35)"
+    recommended: [Influenza, COVID]
+
+  celiac_disease_adult:
+    label: "Celiachia (nuova diagnosi adulti)"
+    recommended: [PCV_adult]
+
+  # ─── Neoplasie ───
+  hematological_cancer:
+    label: "Linfoma, leucemia, mieloma"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe]
+
+  solid_tumor_chemo:
+    label: "Tumore solido in chemioterapia citotossica attiva"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe]
+
+  # ─── Trapianti ───
+  solid_organ_transplant_candidate:
+    label: "Candidato a trapianto d'organo solido"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe, HBV]
+
+  solid_organ_transplant_recipient:
+    label: "Ricevente trapianto d'organo solido"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe, HBV, HAV_if_liver_transplant_12m]
+
+  hematopoietic_stem_cell_recipient:
+    label: "Ricevente cellule staminali ematopoietiche"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe]
+    note: "Schema vaccinale specifico, vedi raccomandazioni separate"
+
+  # ─── Immunosoppressione ───
+  autoimmune_pre_immunosuppression:
+    label: "Malattia autoimmune con probabile imminente immunosoppressione"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe, HBV]
+
+  pharmacological_immunosuppression:
+    label: "Immunosoppressione farmacologica (incl. corticoterapia LT, radioterapia)"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe, HBV]
+
+  # ─── HIV ───
+  HIV_CD4_above_15pct:
+    label: "Infezione HIV con CD4 ≥15% (≥200/µl)"
+    recommended: [Influenza, PCV_adult, HZ_severe, HBV]
+
+  HIV_CD4_below_15pct:
+    label: "Infezione HIV con CD4 <15% (<200/µl)"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe, HBV]
+    note: "PCV: schema 2 dosi"
+
+  # ─── Immunodeficienze congenite ───
+  CVID:
+    label: "Immunodeficienza congenita / comune variabile"
+    recommended: [Influenza, COVID, PCV_adult, HZ_severe]
+
+  complement_deficiency:
+    label: "Deficit complemento (via classica o alternativa)"
+    recommended: [Influenza, COVID, PCV_adult, MenACWY, MenB]
+
+  mannose_binding_lectin_deficiency:
+    label: "Deficit lectina legante mannosio / risposta polisaccaridi"
+    recommended: [Influenza, COVID, PCV_adult, MenACWY, MenB]
+
+  # ─── ORL / Cranio ───
+  cochlear_implant:
+    label: "Impianto cocleare in situ o pianificato"
+    recommended: [PCV_adult]
+
+  skull_base_fracture_or_csf_fistula:
+    label: "Frattura/malformazione base cranio, fistola liquorale"
+    recommended: [PCV_adult]
+
+  # ─── Anomalie cromosomiche ───
+  trisomy_21:
+    label: "Trisomia 21"
+    age_threshold_years: 16
+    recommended: [COVID]
+
+# ═══════════════════════════════════════════════════════════════
+# GRAVIDANZA E PREMATURITÀ
+# ═══════════════════════════════════════════════════════════════
+
+pregnancy_and_neonates:
+
+  pregnancy_protection:
+    label: "Protezione diretta donne in gravidanza"
+    recommended: [Influenza, COVID_2nd_3rd_trimester]
+    note: "Dipende dal trimestre"
+
+  pregnancy_passive_immunization:
+    label: "Per immunizzazione passiva del neonato"
+    recommended: [Pertussis_pregnancy, RSV_passive_oct_mar]
+    note: "RSV solo se parto previsto ottobre-marzo"
+
+  postpartum_unvaccinated:
+    label: "Periodo post-partum se non vaccinata in gravidanza"
+    recommended: [Pertussis_pregnancy, Influenza]
+
+  prematurity_VLBW:
+    label: "Prematurità: nato <32+0 SG o peso <1500g"
+    recommended: [Influenza_first_2_winters, PCV_pediatric, Pertussis_extra_dose]
+    note: "Schema vaccinale accelerato, vedi Tabella 6"
+
+  newborn_HBsAg_positive_mother:
+    label: "Neonato di madre HBsAg+"
+    recommended: [HBV_newborn_protocol]
+
+# ═══════════════════════════════════════════════════════════════
+# PROFESSIONI / SITUAZIONI A RISCHIO ESPOSIZIONE
+# Tabella 8 del calendario
+# ═══════════════════════════════════════════════════════════════
+
+occupational_and_lifestyle:
+
+  healthcare_worker:
+    label: "Personale medico e infermieristico"
+    recommended: [HBV, MOR, V, Influenza_annual, DTP_pertussis_if_neonatology, HAV_if_pediatrics_or_GI]
+
+  contact_with_infants_under_6m:
+    label: "Contatto regolare con lattanti <6 mesi"
+    recommended: [Pertussis_dTpa_every_10y, Influenza_annual]
+
+  laboratory_personnel_exposed:
+    label: "Personale di laboratorio (esposizione campioni)"
+    recommended_conditional: [HAV, HBV, V, Influenza, PCV_adult, MenACWY, MenB, Rabies]
+    note: "A seconda del rischio specifico di esposizione"
+
+  household_contact_high_risk_person:
+    label: "Cerchia familiare di persona ad alto rischio"
+    recommended: [V, Influenza_annual, Pertussis_if_neonatology]
+
+  close_contact_infected:
+    label: "Contatto stretto con persone infette"
+    recommended_per_pathogen: [HAV, HBV, Pertussis]
+
+  nursing_home_residents_or_staff:
+    label: "Ospiti/personale case di cura"
+    recommended: [Influenza_annual]
+
+  drug_users_or_contacts:
+    label: "Consumatori di droga e contatti"
+    recommended: [HAV, HBV]
+
+  multiple_sexual_partners:
+    label: "Persone con cambio frequente partner sessuale"
+    recommended: [HBV]
+
+  MSM:
+    label: "Uomini che hanno rapporti sessuali con uomini"
+    recommended: [HAV, HBV]
+    note: "Vedi anche raccomandazioni Mpox separate"
+
+  STI_consultation:
+    label: "Consultazione per malattia sessualmente trasmissibile"
+    recommended: [HBV]
+
+  hemodialysis:
+    label: "Dialisi"
+    recommended: [HBV, Influenza, PCV_adult]
+
+  hemophilia:
+    label: "Emofilia"
+    recommended: [HBV]
+
+  prison_inmate_or_staff:
+    label: "Carcerati / personale carcerario / sociale a contatto con droga"
+    recommended: [HBV]
+
+  intellectual_disability_institution:
+    label: "Persone con disabilità mentale in istituti / personale"
+    recommended: [HBV]
+
+  high_HBV_endemic_origin:
+    label: "Persone da Paesi endemicità HBV ≥5%"
+    recommended: [HBV]
+
+  child_returning_to_endemic_country:
+    label: "Bambino da Paese endemico per HAV in viaggio temporaneo nel Paese d'origine"
+    recommended: [HAV]
+
+  sewage_water_treatment_workers:
+    label: "Personale fognature/depurazione"
+    recommended: [HAV]
+
+  military_recruit:
+    label: "Recluta militare"
+    recommended: [Pertussis_dTpa]
+    note: "Verificare aggiornamento dT"
+
+  TBE_endemic_area_resident:
+    label: "Residente/soggiorno temporaneo in zona FSME (tutta CH tranne Ticino)"
+    recommended: [FSME]
+    age_min_years: 3
+
+  veterinarian_or_animal_handler:
+    label: "Veterinari, addetti ad animali, ricerca pipistrelli"
+    recommended: [Rabies]
+
+# ═══════════════════════════════════════════════════════════════
+# VIAGGI
+# ═══════════════════════════════════════════════════════════════
+
+travel:
+  reference: "https://www.healthytravel.ch"
+  note: "Le vaccinazioni di viaggio sono fuori scope del calendario base. Considerare separatamente: febbre gialla, encefalite giapponese, colera, tifo, ecc."
+  always_check: [HAV_if_endemic, HBV_if_long_stay, Rabies_if_endemic_remote, MenACWY_if_endemic_or_pilgrimage, Polio_booster_if_endemic]
+
+# ═══════════════════════════════════════════════════════════════
+# REGOLE SPECIALI / ECCEZIONI
+# ═══════════════════════════════════════════════════════════════
+
+special_rules:
+
+  pregnant_women_contraindications:
+    contraindicated_vaccines: [MOR, V, MORV, "Yellow fever (relative)", "Live vaccines generally"]
+
+  immunocompromised_contraindications:
+    contraindicated_vaccines: [MOR, V, MORV, BCG, "Other live vaccines"]
+    note: "Valutare caso per caso a seconda del grado di immunosoppressione"
+
+  post_immunoglobulin_interval:
+    minimum_months_before_live_vaccine: 5
+
+  triviraten_history:
+    issue: "Vaccinazioni MOR fatte con Triviraten (ceppo Rubini) sono inefficaci per orecchioni"
+    action: "Ripetere vaccinazione con vaccino MOR diverso"

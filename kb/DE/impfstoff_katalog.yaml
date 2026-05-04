@@ -1,0 +1,363 @@
+# Impfstoffkatalog Schweiz (2026)
+# Quelle: Schweizerischer Impfplan 2026 (BAG/EKIF, Februar 2026)
+# Mapping: Handelsname -> abgedeckte Antigene
+#
+# Antigen-Kürzel:
+#   D    = Diphtherie (volle Dosis)
+#   d    = Diphtherie (reduzierte Dosis, Erwachsene)
+#   T    = Tetanus
+#   Pa   = Pertussis azellulär (volle Dosis)
+#   pa   = Pertussis azellulär (reduzierte Dosis)
+#   IPV  = Poliomyelitis (inaktiviert)
+#   Hib  = Haemophilus influenzae Typ b
+#   HBV  = Hepatitis B
+#   HAV  = Hepatitis A
+#   M    = Masern
+#   Mu   = Mumps
+#   R    = Röteln
+#   V    = Varizellen (VZV)
+#   PCV13/15/20/21 = Pneumokokken-Konjugatimpfstoff (Valenz)
+#   PPV23 = Pneumokokken-Polysaccharidimpfstoff
+#   MenB = Meningokokken Serogruppe B
+#   MenACWY = Meningokokken Serogruppen A, C, W, Y
+#   HPV9 = Humane Papillomviren 9-valent
+#   FSME = Frühsommer-Meningoenzephalitis
+#   RV   = Rotavirus
+#   HZ   = Herpes Zoster (subunit-adjuvantiert)
+#   Influenza_std / Influenza_HD = saisonale Influenza Standard / Hochdosis
+#   Covid19 = SARS-CoV-2
+#   RSV_mat = maternaler RSV-Impfstoff
+#   RSV_mAk = monoklonaler Antikörper gegen RSV (passive Immunisierung)
+
+produkte:
+
+  # ─────── Sechsfach-Kombinationsimpfstoff Säuglinge ───────
+  - name: "Infanrix hexa"
+    aliase: ["Infanrix Hexa", "Hexavac"]
+    hersteller: "GSK"
+    antigene: [D, T, Pa, IPV, Hib, HBV]
+    altersbereich: { min_monate: 2, max_monate: 84 }
+    hinweis: "Sechsfach-Kombinationsimpfstoff für das 2+1-Schema im Säuglingsalter"
+
+  - name: "Hexyon"
+    aliase: ["Hexacima"]
+    hersteller: "Sanofi"
+    antigene: [D, T, Pa, IPV, Hib, HBV]
+    altersbereich: { min_monate: 2, max_monate: 84 }
+
+  - name: "Vaxelis"
+    hersteller: "MSD/Sanofi"
+    antigene: [D, T, Pa, IPV, Hib, HBV]
+    altersbereich: { min_monate: 2, max_monate: 84 }
+
+  # ─────── Fünffach-Kombinationsimpfstoff ───────
+  - name: "Infanrix-IPV+Hib"
+    aliase: ["Pentavac"]
+    hersteller: "GSK"
+    antigene: [D, T, Pa, IPV, Hib]
+    altersbereich: { min_monate: 2, max_monate: 84 }
+
+  # ─────── Auffrischimpfung Kinder ≥4 Jahre ───────
+  - name: "Infanrix-IPV"
+    aliase: ["Tetravac"]
+    hersteller: "GSK"
+    antigene: [D, T, Pa, IPV]
+    altersbereich: { min_jahre: 4, max_jahre: 7 }
+    hinweis: "Auffrischimpfung 4–7 Jahre"
+
+  # ─────── Erwachsene / Jugendliche (reduzierte Dosis) ───────
+  - name: "Boostrix"
+    hersteller: "GSK"
+    antigene: [d, T, pa]
+    altersbereich: { min_jahre: 4 }
+    hinweis: "dTpa-Auffrischimpfung Jugendliche und Erwachsene"
+
+  - name: "Boostrix-Polio"
+    aliase: ["Boostrix Polio"]
+    hersteller: "GSK"
+    antigene: [d, T, pa, IPV]
+    altersbereich: { min_jahre: 4 }
+
+  - name: "Adacel"
+    hersteller: "Sanofi"
+    antigene: [d, T, pa]
+    altersbereich: { min_jahre: 4 }
+
+  - name: "Adacel-Polio"
+    aliase: ["Adacel Polio"]
+    hersteller: "Sanofi"
+    antigene: [d, T, pa, IPV]
+    altersbereich: { min_jahre: 4 }
+    hinweis: "Häufig für Auffrischimpfung 4–7 und 11–15 Jahre verwendet"
+
+  - name: "Revaxis"
+    hersteller: "Sanofi"
+    antigene: [d, T, IPV]
+    altersbereich: { min_jahre: 6 }
+    hinweis: "dT-IPV ohne Pertussis; kein reines dT in CH verfügbar"
+
+  # ─────── MMR / MMRV ───────
+  - name: "Priorix"
+    hersteller: "GSK"
+    antigene: [M, Mu, R]
+    altersbereich: { min_monate: 9 }
+
+  - name: "M-M-RVaxPro"
+    aliase: ["MMRVaxPro"]
+    hersteller: "MSD"
+    antigene: [M, Mu, R]
+    altersbereich: { min_monate: 9 }
+
+  - name: "Priorix-Tetra"
+    aliase: ["Priorix Tetra"]
+    hersteller: "GSK"
+    antigene: [M, Mu, R, V]
+    altersbereich: { min_monate: 9, max_jahre: 12 }
+    hinweis: "MMRV-Kombinationsimpfstoff, bevorzugt seit 2023"
+
+  - name: "ProQuad"
+    hersteller: "MSD"
+    antigene: [M, Mu, R, V]
+    altersbereich: { min_monate: 12, max_jahre: 12 }
+
+  # ─────── Varizellen monovalent ───────
+  - name: "Varivax"
+    hersteller: "MSD"
+    antigene: [V]
+    altersbereich: { min_monate: 12 }
+
+  - name: "Varilrix"
+    hersteller: "GSK"
+    antigene: [V]
+    altersbereich: { min_monate: 9 }
+
+  # ─────── Pneumokokken ───────
+  - name: "Prevenar 13"
+    aliase: ["Prevenar13", "Prevenar-13", "Prevnar 13"]
+    hersteller: "Pfizer"
+    antigene: [PCV13]
+    altersbereich: { min_wochen: 6 }
+    hinweis: "Weiterhin empfohlen für 2+1-Schema; gleichwertig zu PCV15"
+
+  - name: "Vaxneuvance"
+    hersteller: "MSD"
+    antigene: [PCV15]
+    altersbereich: { min_wochen: 6 }
+    hinweis: "PCV15; gleichwertig zu PCV13 für 2+1-Schema"
+
+  - name: "Prevenar 20"
+    aliase: ["Prevnar 20", "Apexxnar"]
+    hersteller: "Pfizer"
+    antigene: [PCV20]
+    altersbereich: { min_wochen: 6 }
+    hinweis: "PCV20 wird NICHT für das 2+1-Schema bei Säuglingen ohne Risikofaktoren empfohlen"
+
+  - name: "Capvaxive"
+    hersteller: "MSD"
+    antigene: [PCV21]
+    altersbereich: { min_jahre: 18 }
+    hinweis: "Neu ab Herbst 2025 für Erwachsene ≥18 Jahre zugelassen"
+
+  - name: "Pneumovax 23"
+    aliase: ["Pneumo 23", "PPV23"]
+    hersteller: "MSD"
+    antigene: [PPV23]
+    altersbereich: { min_jahre: 2 }
+    hinweis: "NICHT mehr empfohlen seit 2014 in der Schweiz"
+
+  # ─────── Meningokokken ───────
+  - name: "Menveo"
+    hersteller: "GSK"
+    antigene: [MenACWY]
+    altersbereich: { min_monate: 2 }
+    hinweis: "Einziger MCV-ACWY für Säuglinge < 12 Monate zugelassen"
+
+  - name: "Menquadfi"
+    hersteller: "Sanofi"
+    antigene: [MenACWY]
+    altersbereich: { min_jahre: 1 }
+
+  - name: "Nimenrix"
+    hersteller: "Pfizer"
+    antigene: [MenACWY]
+    altersbereich: { min_wochen: 6 }
+
+  - name: "Bexsero"
+    hersteller: "GSK"
+    antigene: [MenB]
+    altersbereich: { min_monate: 2, max_jahre: 24 }
+    hinweis: "4CMenB; zugelassen ab 2 Monate bis 24 Jahre"
+
+  # ─────── HPV ───────
+  - name: "Gardasil 9"
+    aliase: ["Gardasil9", "Silgard 9"]
+    hersteller: "MSD"
+    antigene: [HPV9]
+    altersbereich: { min_jahre: 9 }
+    hinweis: "9-valent: HPV 6, 11, 16, 18, 31, 33, 45, 52, 58"
+
+  # ─────── FSME ───────
+  - name: "FSME-Immun"
+    aliase: ["FSME-Immun CC", "FSME Immun"]
+    hersteller: "Pfizer"
+    antigene: [FSME]
+    altersbereich: { min_jahre: 16 }
+    hinweis: "Erwachsenendosierung"
+
+  - name: "FSME-Immun Junior"
+    aliase: ["FSME Immun Junior"]
+    hersteller: "Pfizer"
+    antigene: [FSME]
+    altersbereich: { min_jahre: 1, max_jahre: 15 }
+    hinweis: "Kinderdosierung 0,25 ml; ab 1 Jahr zugelassen"
+
+  - name: "Encepur N"
+    hersteller: "Bavarian Nordic"
+    antigene: [FSME]
+    altersbereich: { min_jahre: 12 }
+
+  - name: "Encepur N Kinder"
+    hersteller: "Bavarian Nordic"
+    antigene: [FSME]
+    altersbereich: { min_jahre: 1, max_jahre: 11 }
+
+  # ─────── Rotavirus ───────
+  - name: "Rotarix"
+    hersteller: "GSK"
+    antigene: [RV]
+    altersbereich: { min_wochen: 6, max_wochen: 24 }
+    hinweis: "2-Dosen-Schema oral; Kontraindikation ab vollendeter 24. Lebenswoche"
+
+  - name: "RotaTeq"
+    hersteller: "MSD"
+    antigene: [RV]
+    altersbereich: { min_wochen: 6, max_wochen: 32 }
+    hinweis: "3-Dosen-Schema oral (Standard CH: 2 Dosen)"
+
+  # ─────── Hepatitis A / B / Kombination ───────
+  - name: "Havrix"
+    hersteller: "GSK"
+    antigene: [HAV]
+    altersbereich: { min_jahre: 1 }
+
+  - name: "Vaqta"
+    hersteller: "MSD"
+    antigene: [HAV]
+    altersbereich: { min_jahre: 1 }
+
+  - name: "Engerix-B"
+    hersteller: "GSK"
+    antigene: [HBV]
+    altersbereich: { min_monate: 0 }
+
+  - name: "HBVaxPro"
+    hersteller: "MSD"
+    antigene: [HBV]
+    altersbereich: { min_monate: 0 }
+
+  - name: "Twinrix"
+    aliase: ["Twinrix Erwachsene", "Twinrix Kinder"]
+    hersteller: "GSK"
+    antigene: [HAV, HBV]
+    altersbereich: { min_jahre: 1 }
+
+  # ─────── Herpes Zoster ───────
+  - name: "Shingrix"
+    hersteller: "GSK"
+    antigene: [HZ]
+    altersbereich: { min_jahre: 18 }
+    hinweis: "Subunit-adjuvantierter Impfstoff, 2 Dosen im Abstand 0–2 Monate"
+
+  - name: "Zostavax"
+    hersteller: "MSD"
+    antigene: [HZ_Lebend]
+    altersbereich: { min_jahre: 50 }
+    hinweis: "Lebendimpfstoff; NICHT mehr empfohlen; ersetzt durch Shingrix"
+
+  # ─────── Influenza ───────
+  - name: "Influvac Tetra"
+    hersteller: "Viatris"
+    antigene: [Influenza_std]
+    altersbereich: { min_monate: 6 }
+
+  - name: "Vaxigrip Tetra"
+    hersteller: "Sanofi"
+    antigene: [Influenza_std]
+    altersbereich: { min_monate: 6 }
+
+  - name: "Efluelda"
+    aliase: ["Fluzone High-Dose"]
+    hersteller: "Sanofi"
+    antigene: [Influenza_HD]
+    altersbereich: { min_jahre: 60 }
+    hinweis: "Hochdosis-Grippeimpfstoff; bevorzugt ab 75 Jahren und ab 65 Jahren mit Risikofaktor"
+
+  # ─────── Covid-19 ───────
+  - name: "Comirnaty"
+    aliase: ["Comirnaty Omicron", "Comirnaty JN.1", "Comirnaty LP.8.1"]
+    hersteller: "Pfizer/BioNTech"
+    antigene: [Covid19]
+    altersbereich: { min_monate: 6 }
+    hinweis: "mRNA; Formulierung wird an zirkulierende Varianten angepasst"
+
+  - name: "Spikevax"
+    hersteller: "Moderna"
+    antigene: [Covid19]
+    altersbereich: { min_monate: 6 }
+
+  # ─────── RSV ───────
+  - name: "Abrysvo"
+    hersteller: "Pfizer"
+    antigene: [RSV_mat]
+    altersbereich: { min_jahre: 18, max_jahre: 50 }
+    hinweis: "Maternaler RSV-Impfstoff für Schwangere; 32+0 bis 36+0 SSW"
+
+  - name: "Beyfortus"
+    aliase: ["Nirsevimab"]
+    hersteller: "Sanofi/AstraZeneca"
+    antigene: [RSV_mAk]
+    altersbereich: { min_monate: 0, max_monate: 24 }
+    hinweis: "Monoklonaler Antikörper (kein Impfstoff). Passive Immunisierung Neugeborene/Säuglinge"
+
+  # ─────── Tollwut ───────
+  - name: "Rabipur"
+    hersteller: "Bavarian Nordic"
+    antigene: [Tollwut]
+    altersbereich: { min_monate: 0 }
+
+  - name: "Verorab"
+    hersteller: "Sanofi"
+    antigene: [Tollwut]
+    altersbereich: { min_monate: 0 }
+
+# ─────── Antigen-Äquivalenzen ───────
+antigen_aequivalenzen:
+  DTP_Kinder: [D, T, Pa]
+  DTP_Erwachsene: [d, T, pa]
+  DTP_alle: [D, T, Pa, d, pa]
+  MMR: [M, Mu, R]
+  MMRV: [M, Mu, R, V]
+  PCV_hoeher_valent: [PCV15, PCV20, PCV21]
+  Influenza_alle: [Influenza_std, Influenza_HD]
+
+# ─────── Veraltete / nicht mehr empfohlene Produkte ───────
+veraltete_produkte:
+  - name: "Triviraten"
+    grund: "Rubini-Mumpsstamm unwirksam; Impfungen mit diesem Produkt sind zu wiederholen"
+  - name: "Pneumovax 23"
+    grund: "PPV23 seit 2014 nicht mehr empfohlen; Nachholimpfung mit höhervalentem PCV erforderlich"
+  - name: "Zostavax"
+    grund: "Lebendimpfstoff; seit 2022 durch Shingrix ersetzt"
+
+# ─────── Historische Impfschemata (nicht als Fehler werten) ───────
+historische_schemata:
+  DTPa_3plus1:
+    beschreibung: "3+1-Schema gültig bis 2018: Dosen mit 2-4-6-15/24 Monaten"
+    gueltig_bis_geburtsjahr: 2018
+    gilt_als_vollstaendig: true
+    gesamtdosen: 4
+  DTPa_2plus1:
+    beschreibung: "2+1-Schema empfohlen seit 2019: Dosen mit 2-4-12 Monaten"
+    gueltig_ab_geburtsjahr: 2019
+    gilt_als_vollstaendig: true
+    gesamtdosen: 3

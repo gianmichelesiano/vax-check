@@ -1,0 +1,311 @@
+# Risikogruppen und Risikosituationen – empfohlene Impfungen
+# Quelle: Schweizerischer Impfplan 2026 (BAG/EKIF), Kapitel 3 + Tabelle 5 + Tabelle 8
+#
+# Für das Rule Engine: Basierend auf dem Patientenprofil (Erkrankungen/Beruf/Situation)
+# werden die zusätzlich empfohlenen Impfungen über die altersgemässen Basisimpfungen
+# hinaus zurückgegeben.
+
+metadaten:
+  version: "2026.1"
+  quelle: "Schweizerischer Impfplan 2026, Kapitel 3.1, 3.2, 3.3"
+
+# ═══════════════════════════════════════════════════════════════
+# CHRONISCHE GRUNDERKRANKUNGEN / KLINISCHE RISIKOFAKTOREN
+# Tabelle 5 des Impfplans
+# ═══════════════════════════════════════════════════════════════
+
+chronische_erkrankungen:
+
+  # ─── Kardiovaskulär ───
+  herzinsuffizienz:
+    bezeichnung: "Herzinsuffizienz"
+    schwelle: "NYHA III/IV oder Verschlechterung; NT-Pro BNP > 125 pg/ml oder Kardiomyopathie"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene]
+
+  herzerkrankung:
+    bezeichnung: "Herzerkrankung / angeborene Fehlbildung"
+    empfohlen: [Influenza, Covid19]
+
+  schlaganfall_oder_vaskulopathie:
+    bezeichnung: "Schlaganfall und/oder symptomatische Vaskulopathie; Arterielle Hypertonie mit Endorganschaden; Pulmonalarterielle Hypertonie"
+    empfohlen: [Covid19]
+
+  # ─── Atemwege ───
+  COPD:
+    bezeichnung: "Chronisch obstruktive Pneumopathie"
+    schwelle: "GOLD Stadium II–IV oder Verschlechterung"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  schweres_asthma:
+    bezeichnung: "Schweres Asthma bei verlängerter oder häufiger Behandlung mit oralen Steroiden"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  bronchiektasen_antikoerpermangel:
+    bezeichnung: "Bronchiektasen durch Antikörpermangel"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene]
+
+  andere_lungenerkrankungen:
+    bezeichnung: "Andere Lungenerkrankungen (z.B. Lungenfibrose, Lungenemphysem, Asthma bronchiale)"
+    empfohlen: [Influenza, Covid19]
+
+  # ─── Leber ───
+  chronische_lebererkrankung:
+    bezeichnung: "Chronische Lebererkrankung"
+    empfohlen: [Influenza, HAV, HBV]
+
+  leberzirrhose:
+    bezeichnung: "Leberzirrhose"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HAV, HBV]
+
+  # ─── Milz ───
+  asplenie:
+    bezeichnung: "Anatomische oder funktionelle Asplenie (inkl. Sichelzellkrankheit)"
+    empfohlen: [Influenza, PCV_Erwachsene, MenACWY, MenB]
+    hinweis: "Separate Empfehlungen BAG für Asplenie beachten"
+
+  # ─── Niere ───
+  niereninsuffizienz:
+    bezeichnung: "Niereninsuffizienz"
+    schwelle: "Stadium 4 (GFR < 30 ml/min) oder höher je nach Impfung"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  nephrotisches_syndrom:
+    bezeichnung: "Nephrotisches Syndrom"
+    empfohlen: [Influenza, PCV_Erwachsene]
+
+  dialyse:
+    bezeichnung: "Hämodialyse"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HBV]
+    hinweis: "HBV mit Dialysedosis 40µg, spezielles Schema"
+
+  # ─── Stoffwechsel ───
+  diabetes:
+    bezeichnung: "Diabetes mellitus mit Auswirkung auf Herz-, Lungen- oder Nierenfunktion"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  adipositas:
+    bezeichnung: "Adipositas (BMI ≥35 kg/m²)"
+    empfohlen: [Influenza, Covid19]
+
+  zoeliakle_neudiagnose:
+    bezeichnung: "Zöliakie (Neudiagnose bei Erwachsenen)"
+    empfohlen: [PCV_Erwachsene]
+
+  # ─── Neoplasien ───
+  lymphom_leukaemie_myelom:
+    bezeichnung: "Lymphom, Leukämie, Myelom"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  solider_tumor_chemotherapie:
+    bezeichnung: "Solider maligner Tumor unter aktiver zytotoxischer Chemotherapie"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  # ─── Transplantationen ───
+  kandidat_solidorgantransplantation:
+    bezeichnung: "Kandidat für Solidorgantransplantation"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ, HBV]
+
+  empfaenger_solidorgantransplantation:
+    bezeichnung: "Empfänger Solidorgantransplantation"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ, HBV]
+
+  empfaenger_stammzelltransplantation:
+    bezeichnung: "Empfänger hämatopoetischer Stammzelltransplantation"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+    hinweis: "Spezifisches Impfschema nach Stammzelltransplantation beachten"
+
+  # ─── Immunsuppression ───
+  autoimmun_vor_immunsuppression:
+    bezeichnung: "Autoimmunerkrankung mit wahrscheinlich bevorstehender Immunsuppression"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ, HBV]
+
+  pharmakologische_immunsuppression:
+    bezeichnung: "Pharmakologische Immunsuppression (inkl. Langzeit-Kortikosteroide, Biologika, Zytostatika)"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ, HBV]
+
+  # ─── HIV ───
+  HIV_CD4_hoch:
+    bezeichnung: "HIV-Infektion mit CD4 ≥200/µl"
+    empfohlen: [Influenza, PCV_Erwachsene, HZ, HBV]
+
+  HIV_CD4_niedrig:
+    bezeichnung: "Schwere HIV-Immunsuppression (CD4 < 200/µl)"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ, HBV]
+
+  # ─── Immundefizienz angeboren ───
+  angeborene_immundefizienz:
+    bezeichnung: "Angeborene / gemeinsame variable Immundefizienz (CVID)"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, HZ]
+
+  komplementdefizit:
+    bezeichnung: "Komplementdefizit (klassischer oder alternativer Weg)"
+    empfohlen: [Influenza, Covid19, PCV_Erwachsene, MenACWY, MenB]
+
+  # ─── HNO / Schädel ───
+  cochleaimplantat:
+    bezeichnung: "Cochleaimplantat vorhanden oder geplant"
+    empfohlen: [PCV_Erwachsene]
+
+  schaedelbasisbruch_liquorfistel:
+    bezeichnung: "Schädelbasisfraktur / -fehlbildung, Liquorfistel"
+    empfohlen: [PCV_Erwachsene]
+
+  # ─── Chromosomale Anomalien ───
+  trisomie_21:
+    bezeichnung: "Trisomie 21"
+    ab_alter_jahre: 16
+    empfohlen: [Covid19]
+
+# ═══════════════════════════════════════════════════════════════
+# SCHWANGERSCHAFT UND FRÜHGEBURT
+# ═══════════════════════════════════════════════════════════════
+
+schwangerschaft_und_neugeborene:
+
+  schwangerschaft_direktschutz:
+    bezeichnung: "Direktschutz Schwangerer"
+    empfohlen: [Influenza, Covid19_2_3_Trimester]
+
+  schwangerschaft_passive_immunisierung:
+    bezeichnung: "Passive Immunisierung des Neugeborenen"
+    empfohlen: [Pertussis_Schwangerschaft, RSV_passiv_okt_maerz]
+    hinweis: "RSV nur bei voraussichtlichem Geburtstermin Oktober–März"
+
+  post_partum_ungeimpft:
+    bezeichnung: "Post-partum falls nicht während Schwangerschaft geimpft"
+    empfohlen: [Pertussis_Schwangerschaft, Influenza]
+
+  fruehgeburt_VLBW:
+    bezeichnung: "Frühgeburt: Geburt < 32+0 SSW oder Gewicht < 1500 g"
+    empfohlen: [Influenza_erste_2_Winter, PCV_Kinder, Pertussis_zusatzdosis]
+    hinweis: "Beschleunigtes Impfschema; siehe Tabelle 6"
+
+  neugeborenes_HBsAg_positive_mutter:
+    bezeichnung: "Neugeborenes von HBsAg-positiver Mutter"
+    empfohlen: [HBV_Neugeborenenprotokoll]
+
+# ═══════════════════════════════════════════════════════════════
+# EXPONIERTE BEVÖLKERUNGSGRUPPEN / BERUFE
+# Tabelle 8 des Impfplans
+# ═══════════════════════════════════════════════════════════════
+
+berufe_und_situationen:
+
+  beschaeftigte_gesundheitswesen:
+    bezeichnung: "Beschäftigte im Gesundheitswesen (BiG)"
+    empfohlen: [HBV, MMR, V, Influenza_jaehrlich, DTP_Pertussis_bei_Saeuglingsstation, HAV_bei_Paediatrie_GI]
+    hinweis: "Vollständiger Impfschutz gemäss Impfplan empfohlen; HBV mit Erfolgskontrolle (anti-HBs ≥100 U/L)"
+
+  kontakt_saeuglinge_unter_6_monaten:
+    bezeichnung: "Regelmässiger Kontakt (beruflich/familiär) zu Säuglingen < 6 Monaten"
+    empfohlen: [Pertussis_dTpa_alle_10_jahre, Influenza_jaehrlich]
+
+  laborpersonal_exponiert:
+    bezeichnung: "Laborpersonal mit möglichem Expositionsrisiko"
+    empfohlen_je_exposition: [HAV, HBV, V, Influenza, PCV_Erwachsene, MenACWY, MenB, Tollwut]
+    hinweis: "Gemäss spezifischem Expositionsrisiko"
+
+  familienangehoerige_risikopersonen:
+    bezeichnung: "Familienangehörige von Risikopersonen"
+    empfohlen: [V, Influenza_jaehrlich, Pertussis_bei_Neugeborenen]
+
+  enge_kontaktpersonen_erkrankter:
+    bezeichnung: "Enge Kontaktpersonen von Erkrankten"
+    empfohlen_je_erreger: [HAV, HBV, Pertussis]
+
+  bewohner_personal_pflegeheime:
+    bezeichnung: "Bewohnende und Personal von Pflegeheimen und Einrichtungen für chronisch Kranke"
+    empfohlen: [Influenza_jaehrlich]
+
+  drogenkonsumierende:
+    bezeichnung: "Drogenkonsumierende Personen und deren Kontaktpersonen"
+    empfohlen: [HAV, HBV]
+
+  haeufig_wechselnde_sexualpartner:
+    bezeichnung: "Personen mit häufig wechselnden Sexualpartnern"
+    empfohlen: [HBV]
+
+  MSM:
+    bezeichnung: "Männer mit sexuellen Kontakten zu Männern"
+    empfohlen: [HAV, HBV]
+    hinweis: "Mpox-Empfehlungen separat, siehe BAG-Webseite"
+
+  STI_konsultation:
+    bezeichnung: "Konsultation wegen sexuell übertragbarer Krankheit"
+    empfohlen: [HBV]
+
+  haemodiályse:
+    bezeichnung: "Hämodialysepatientinnen und -patienten"
+    empfohlen: [HBV, Influenza, PCV_Erwachsene]
+
+  haemophilie:
+    bezeichnung: "Hämophile Personen"
+    empfohlen: [HBV]
+
+  sozialarbeit_gefaengnis:
+    bezeichnung: "Sozialarbeitende, Gefängnispersonal, Polizei mit Drogenkonsumierenden-Kontakt"
+    empfohlen: [HBV]
+
+  personen_in_haft:
+    bezeichnung: "Personen in Haft"
+    empfohlen: [HBV]
+
+  betreuung_geistige_beeintraechtigung:
+    bezeichnung: "Personen mit geistigen Beeinträchtigungen in Heimen und Betreuungspersonal"
+    empfohlen: [HBV]
+
+  herkunft_hochendemisches_HBV_land:
+    bezeichnung: "Personen aus Ländern mit HBsAg-Prävalenz ≥5%"
+    empfohlen: [HBV]
+
+  kind_reise_endemisches_HAV_land:
+    bezeichnung: "Kind aus endemischem Land mit vorübergehendem Aufenthalt im Herkunftsland"
+    empfohlen: [HAV]
+
+  kanalisation_klaeranlagen:
+    bezeichnung: "Kanalisationsarbeitende und Angestellte von Kläranlagen"
+    empfohlen: [HAV]
+
+  rekruten:
+    bezeichnung: "Rekrutinnen und Rekruten"
+    empfohlen: [Pertussis_dTpa]
+    hinweis: "dT-Auffrischung prüfen"
+
+  FSME_risikogebiet:
+    bezeichnung: "Erwachsene und Kinder (ab 3 J.) in FSME-Risikogebiet mit Zeckenexposition"
+    empfohlen: [FSME]
+    min_alter_jahre: 3
+    hinweis: "Gesamte Schweiz ausser Kanton Tessin gilt als Risikogebiet"
+
+  tieraerzte_tierpfleger:
+    bezeichnung: "Tierärztinnen und -ärzte, Tierpfleger, Fledermausforschende"
+    empfohlen: [Tollwut]
+
+# ═══════════════════════════════════════════════════════════════
+# AUSLANDREISENDE
+# ═══════════════════════════════════════════════════════════════
+
+auslandreisende:
+  referenz: "https://www.healthytravel.ch"
+  hinweis: "Reiseimpfungen sind nicht Bestandteil des Impfplans. Separat berücksichtigen: Gelbfieber, Japanische Enzephalitis, Cholera, Typhus usw."
+  immer_pruefen: [HAV_bei_Endemie, HBV_bei_Langaufenthalt, Tollwut_bei_Endemie_Fernregion, MenACWY_bei_Endemie_oder_Pilgerfahrt, IPV_Auffrischung_bei_Endemie]
+
+# ═══════════════════════════════════════════════════════════════
+# SONDERREGELN / AUSNAHMEN
+# ═══════════════════════════════════════════════════════════════
+
+sonderregeln:
+
+  kontraindikationen_schwangerschaft:
+    kontraindizierte_impfstoffe: [MMR, V, MMRV, "Gelbfieber (relativ)", "Lebendimpfstoffe generell"]
+
+  kontraindikationen_immunsupprimierte:
+    kontraindizierte_impfstoffe: [MMR, V, MMRV, BCG, "Andere Lebendimpfstoffe"]
+    hinweis: "Einzelfallbeurteilung abhängig vom Grad der Immunsuppression"
+
+  abstand_nach_immunglobulin:
+    min_monate_vor_lebendimpfstoff: 5
+
+  triviraten_vorgeschichte:
+    problem: "Impfungen gegen Mumps mit Triviraten (Rubini-Stamm) sind unwirksam"
+    massnahme: "MMR-Impfung mit wirksamem Impfstoff wiederholen (Ziel: 2 wirksame Dosen)"

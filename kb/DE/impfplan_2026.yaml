@@ -1,0 +1,526 @@
+# Schweizerischer Impfplan 2026 – Strukturierte Regeln
+# Quelle: BAG/EKIF, Februar 2026
+# Dokument: Schweizerischer Impfplan 2026 (DE)
+#
+# Empfehlungskategorien:
+#   basisimpfung:    Unerlässlich für individuelle und öffentliche Gesundheit
+#   ergaenzend:      Optimaler individueller Schutz
+#   risikogruppe:    Erhöhtes Risiko für Komplikation, Exposition oder Übertragung
+
+metadaten:
+  version: "2026.1"
+  quelle: "BAG/EKIF – Schweizerischer Impfplan 2026"
+  datum: "2026-02-01"
+  sprache: "de"
+  url: "https://www.bag.admin.ch/impfplan"
+
+# ═══════════════════════════════════════════════════════════════
+# EMPFOHLENE IMPFUNGEN NACH ANTIGEN
+# ═══════════════════════════════════════════════════════════════
+
+antigene:
+
+  # ──────────── DIPHTHERIE-TETANUS-PERTUSSIS ────────────
+  DTP:
+    vollname: "Diphtherie, Tetanus, Pertussis"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.b/c, 1.2.a, 1.3.a, 1.4.a, 1.5.a"
+
+    grundimmunisierung:
+      ab_geburtsjahr: 2019
+      schema: "2+1"
+      dosen:
+        - { alter_monate: 2, antigen_form: "DTPa", kombination: "DTPa-IPV-Hib-HBV" }
+        - { alter_monate: 4, antigen_form: "DTPa", kombination: "DTPa-IPV-Hib-HBV" }
+        - { alter_monate: 12, antigen_form: "DTPa", kombination: "DTPa-IPV-Hib-HBV", min_abstand_tage: 180 }
+      min_alter_wochen_erste_dosis: 8
+
+    historisches_schema:
+      bis_geburtsjahr: 2018
+      schema: "3+1"
+      gesamtdosen: 4
+      gilt_als_vollstaendig: true
+      hinweis: "Säuglinge mit 3 Dosen vor 12 Monaten + Auffrischung ab 12 Monaten"
+
+    auffrischimpfungen:
+      - { alter_jahre: [4, 7], antigen_form: "DTPa oder dTpa", kombination: "DTPa-IPV oder dTpa-IPV", hinweis: "Auffrischung Vorschulalter" }
+      - { alter_jahre: [11, 15], antigen_form: "dTpa", hinweis: "Auffrischung Jugendliche" }
+      - { alter_jahre: 25, antigen_form: "dTpa", hinweis: "Einmalige Pertussis-Auffrischung Erwachsene" }
+      - { alter_jahre: 45, antigen_form: "dT", hinweis: "dT-Ersatz: dTpa oder dT-IPV verwenden" }
+      - { alter_jahre: 65, antigen_form: "dT" }
+      - { ab_alter_jahre: 65, alle_jahre: 10, antigen_form: "dT" }
+
+    auffrisch_intervalle:
+      erwachsene_25_64_jahre: 20
+      erwachsene_ab_65_jahre: 10
+      immundefizient: 10
+      hinweis: "Kürzere Intervalle je nach Risikosituation möglich (z.B. Diphtherieexposition, Reise in Endemiegebiet)"
+
+    nachholimpfung:
+      referenz_tabellen: "Tabelle 2, 3, 4"
+      prinzip: "Unterbrochene Impfserie muss nicht neu begonnen werden"
+
+  # ──────────── POLIOMYELITIS ────────────
+  IPV:
+    vollname: "Poliomyelitis (inaktiviert)"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.d, 1.2.a"
+
+    grundimmunisierung:
+      ab_geburtsjahr: 2019
+      schema: "2+1"
+      dosen:
+        - { alter_monate: 2 }
+        - { alter_monate: 4 }
+        - { alter_monate: 12 }
+
+    auffrischimpfungen:
+      - { alter_jahre: [4, 7], hinweis: "Im DTPa-IPV-Kombinationsimpfstoff enthalten" }
+      - { alter_jahre: [11, 15], hinweis: "Im dTpa-IPV-Kombinationsimpfstoff enthalten" }
+
+    abschluss_kriterien:
+      schema_2plus1: { gesamtdosen: 4, dosen_nach_12_monate: 2 }
+      schema_3plus1: { gesamtdosen: 5, dosen_nach_12_monate: 2 }
+      min_dosen_erwachsene: 3
+
+    zusaetzliche_auffrischung:
+      indikation: "Nur bei Expositionsrisiko (Reise in Endemiegebiet, Arbeit mit Polioviren)"
+      intervall_jahre: 10
+
+  # ──────────── HAEMOPHILUS INFLUENZAE TYP B ────────────
+  Hib:
+    vollname: "Haemophilus influenzae Typ b"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.e"
+
+    grundimmunisierung:
+      dosen:
+        - { alter_monate: 2 }
+        - { alter_monate: 4 }
+        - { alter_monate: 12 }
+
+    nachholimpfung:
+      max_alter_monate: 60
+      fenster_schliesst: "5. Geburtstag"
+      schema_nach_alter:
+        - { altersbereich_monate: [3, 5], dosen: 3, intervalle_monate: [2, 6] }
+        - { altersbereich_monate: [6, 11], dosen: 3, intervalle_monate: [1, 6] }
+        - { altersbereich_monate: [12, 14], dosen: 2, intervall_monate: 2 }
+        - { altersbereich_monate: [15, 59], dosen: 1 }
+      nach_alter: "Nicht mehr indiziert (natürliche Immunität)"
+
+  # ──────────── HEPATITIS B ────────────
+  HBV:
+    vollname: "Hepatitis B"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.f, 1.3.b, 3.1.c"
+
+    grundimmunisierung:
+      bevorzugtes_alter: "Säuglingsalter"
+      dosen:
+        - { alter_monate: 2 }
+        - { alter_monate: 4 }
+        - { alter_monate: 12 }
+      kombination: "DTPa-IPV-Hib-HBV (Sechsfach)"
+
+    jugendlichen_schema:
+      altersbereich_jahre: [11, 15]
+      optionen:
+        - { name: "Kinder_3Dosen", dosen: 3, intervalle_monate: [1, 5] }
+        - { name: "Erwachsene_2Dosen", dosen: 2, intervalle_monate: [4, 6], hinweis: "Erwachsenenimpfstoff; 1. Dosis zwischen 11. und 16. Geburtstag" }
+
+    erwachsenen_schema:
+      min_alter_jahre: 16
+      dosen: 3
+      intervalle_monate: [1, 5]
+      indikation: "Nur bei Expositionsrisiko (siehe Kapitel 3.1.c)"
+
+    sonderfall_HBsAg_positive_mutter:
+      dosen: 4
+      schema: [
+        { alter_tage: 0, mit_HBIgG: true, impfstoff: "monovalent" },
+        { alter_monate: 1, impfstoff: "monovalent" },
+        { alter_monate: 2, impfstoff: "sechsfach" },
+        { alter_monate: 12, impfstoff: "sechsfach" }
+      ]
+      serologische_kontrolle: true
+      hinweis: "anti-HBs und HBsAg 4 Wochen nach letzter Dosis"
+
+  # ──────────── PNEUMOKOKKEN ────────────
+  PCV_Kinder:
+    vollname: "Pneumokokken (Kinder)"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.g, 3.1.h"
+
+    grundimmunisierung:
+      dosen:
+        - { alter_monate: 2 }
+        - { alter_monate: 4 }
+        - { alter_monate: 12 }
+      schema: "2+1"
+
+    empfohlene_impfstoffe_2026:
+      unter_5_jahre: ["PCV13", "PCV15"]
+      5_bis_17_jahre: ["PCV15", "PCV20"]
+      hinweis: "PCV20 NICHT empfohlen für 2+1-Schema bei Säuglingen ohne Risikofaktoren"
+
+    nachholimpfung:
+      max_alter: "5. Geburtstag"
+      schema_nach_alter:
+        - { altersbereich_monate: [3, 5], dosen: 3, intervalle_monate: [2, 6] }
+        - { altersbereich_monate: [6, 11], dosen: 3, intervalle_monate: [1, 6] }
+        - { altersbereich_monate: [12, 23], dosen: 2, intervall_monate: 2 }
+        - { altersbereich_monate: [24, 59], dosen: 1 }
+      nach_alter: "Nur bei Risikogruppen (Kapitel 3.1.h)"
+
+  PCV_Erwachsene:
+    vollname: "Pneumokokken (Erwachsene ≥65 Jahre)"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.5.d"
+
+    min_alter_jahre: 65
+    schema:
+      nicht_vorgeimpft:
+        dosen: 1
+        empfohlene_impfstoffe: ["PCV20", "PCV21"]
+      nur_PCV13_vorgeimpft:
+        dosen: 1
+        empfohlene_impfstoffe: ["PCV20", "PCV21"]
+        min_abstand_jahre_seit_PCV13: 1
+      nur_PCV15_vorgeimpft:
+        dosen: 1
+        empfohlene_impfstoffe: ["PCV21"]
+        min_abstand_jahre_seit_PCV15: 1
+        hinweis: "Mit SL-Aufnahme PCV21 wird PCV15 nicht mehr als Option empfohlen"
+      nur_PPV23_vorgeimpft:
+        dosen: 1
+        empfohlene_impfstoffe: ["PCV20", "PCV21"]
+        min_abstand_jahre_seit_PPV23: 1
+      bereits_hoeher_valent_ab_65:
+        dosen: 0
+        hinweis: "Keine weitere Dosis erforderlich"
+
+  # ──────────── ROTAVIRUS ────────────
+  RV:
+    vollname: "Rotavirus"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.1.h"
+
+    grundimmunisierung:
+      dosen: 2
+      dosen_detail:
+        - { alter_monate: 2 }
+        - { alter_monate: 4 }
+      min_alter_wochen_erste_dosis: 6
+      max_alter_wochen_erste_dosis: 15.86
+      max_alter_wochen_letzte_dosis: 23.86
+      min_abstand_wochen: 4
+      kontraindiziert_ab_wochen: 24
+      applikation: "oral"
+
+  # ──────────── MASERN-MUMPS-RÖTELN ────────────
+  MMR:
+    vollname: "Masern, Mumps, Röteln"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.k"
+
+    grundimmunisierung:
+      dosen: 2
+      dosen_detail:
+        - { alter_monate: 9 }
+        - { alter_monate: 12 }
+      bevorzugter_impfstoff: "MMRV (mit Varizellen)"
+      min_abstand_wochen: 4
+
+    impfung_bei_ausbruch:
+      indikation: "Masernausbruch in der Umgebung, Kontakt zu Masernfall, Reise in Endemiegebiet"
+      min_alter_monate: 6
+      hinweis: "Dosen vor dem 9. Lebensmonat zählen nicht – zusätzliche Dosis mit 9 Monaten erforderlich"
+
+    nachholimpfung:
+      zielgruppe: "Alle nach 1963 geborenen Personen"
+      erforderliche_dosen: 2
+      min_abstand_wochen: 4
+      hinweis_Triviraten: "Impfungen mit Triviraten (Rubini-Mumpsstamm) sind unwirksam und zu wiederholen"
+
+    kontraindikationen:
+      - "Schwangerschaft (Lebendimpfstoff)"
+      - "Zelluläre Immundefizienz"
+
+  # ──────────── VARIZELLEN ────────────
+  V:
+    vollname: "Varizellen (VZV)"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.l, 3.1.n"
+
+    grundimmunisierung:
+      ab_geburtsjahr: 2023
+      dosen: 2
+      dosen_detail:
+        - { alter_monate: 9 }
+        - { alter_monate: 12 }
+      bevorzugter_impfstoff: "MMRV"
+      min_abstand_wochen: 4
+
+    nachholimpfung:
+      unter_40_jahre: "Empfohlen für Nicht-Geimpfte ohne Varizellenanamnese"
+      ab_40_jahre: "Nur bei Risikogruppen (Kapitel 3.1.n)"
+      dosen_bei_ungeimpft: 2
+      dosen_bei_einer_dosis: 1
+      min_abstand_wochen: 4
+
+    kontraindikationen:
+      - "Schwangerschaft (Lebendimpfstoff)"
+      - "Schwere Immundefizienz"
+
+  # ──────────── HPV ────────────
+  HPV:
+    vollname: "Humane Papillomviren"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.3.c, 1.4.b"
+
+    grundimmunisierung:
+      zielgruppe_alter_jahre: [11, 14]
+      dosen: 2
+      intervall_monate: 6
+      impfstoff: "9-valent (Gardasil 9)"
+      zielgruppe: "Mädchen und Jungen"
+      durchimpfungsziel_prozent: 90
+
+    alternative_schemata:
+      alter_15_bis_26:
+        dosen: 3
+        intervalle_monate: [2, 6]
+        kategorie: "Nachholimpfung (15–19) oder ergänzend (20–26)"
+      immundefizient_11_bis_14:
+        dosen: 3
+        intervalle_monate: [2, 6]
+      nach_alter_26: "Keine Routineimpfung mehr empfohlen"
+
+    nachholimpfung_bis: "20. Geburtstag"
+
+  # ──────────── MENINGOKOKKEN B ────────────
+  MenB:
+    vollname: "Meningokokken Serogruppe B"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.1.i, 1.3.d, 3.1.f"
+
+    grundimmunisierung_saeuglinge:
+      dosen: 3
+      dosen_detail:
+        - { alter_monate: "2–3" }
+        - { alter_monate: "4–5" }
+        - { alter_monate: "12–18" }
+      min_abstand_erste_zwei_monate: 2
+      min_abstand_2_und_3_monate: 6
+      hinweis_fieber: "Prophylaktisches Paracetamol (20mg/kg) bei Koadministration mit anderen Impfungen erwägen"
+
+    jugendlichen_schema:
+      zielgruppe_alter_jahre: [11, 15]
+      dosen: 2
+      min_abstand_monate: 1
+
+    nachholimpfung:
+      saeuglinge_bis_5_jahre: "Bis 1 Tag vor dem 5. Geburtstag"
+      jugendliche_bis_20_jahre: "Bis zum 20. Geburtstag"
+      schema_nach_alter:
+        - { altersbereich_monate: [4, 11], dosen: 3, intervalle_monate: [2, 6] }
+        - { altersbereich_monate: [12, 23], dosen: 3, intervalle_monate: [2, 12] }
+        - { altersbereich_monate: [24, 59], dosen: 2, intervall_monate: 1 }
+        - { altersbereich_jahre: [16, 19], dosen: 2, intervall_monate: 1 }
+
+  # ──────────── MENINGOKOKKEN ACWY ────────────
+  MenACWY:
+    vollname: "Meningokokken Serogruppen A, C, W, Y"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.1.j, 1.3.d, 3.1.f"
+
+    grundimmunisierung_kleinkinder:
+      zielgruppe_alter_monate: [12, 18]
+      dosen: "1 oder 2 (je nach Impfstoff)"
+      hinweis: "Kann zusammen mit 3. MenB-Dosis verabreicht werden (Meningokokken-Impfpaket)"
+
+    jugendlichen_schema:
+      zielgruppe_alter_jahre: [11, 15]
+      dosen: 1
+
+    nachholimpfung:
+      kleinkinder_bis_5_jahre: "Bis zum 5. Geburtstag"
+      jugendliche_bis_20_jahre: "Bis zum 20. Geburtstag"
+
+  # ──────────── FSME ────────────
+  FSME:
+    vollname: "Frühsommer-Meningoenzephalitis"
+    empfehlungskategorie: risikogruppe
+    kapitel: "3.1.a"
+
+    indikation: "Gesamte Schweiz mit Ausnahme des Kantons Tessin gilt als FSME-Risikogebiet"
+
+    grundimmunisierung:
+      ab_alter_jahre: 3
+      dosen: 3
+      schema_optionen:
+        standard: { intervalle_monate: [1, "6–12"] }
+        beschleunigt: { intervalle_tage: [14, "5–12 Monate"] }
+      hinweis: "Dosierung altersabhängig gemäss Fachinformation"
+
+    auffrischimpfung:
+      alle_jahre: 10
+
+    kleinkinder_individuell:
+      ab_alter_jahre: 1
+      indikation: "Hohes Zeckenexpositionsrisiko; individuelle Indikationsstellung"
+      hinweis: "Impfstoff ab 1 Jahr zugelassen"
+
+  # ──────────── HERPES ZOSTER ────────────
+  HZ:
+    vollname: "Herpes Zoster"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.5.b, 3.1.d"
+
+    grundimmunisierung:
+      ab_alter_jahre: 65
+      dosen: 2
+      intervall_monate: 2
+      impfstoff: "Shingrix (subunit-adjuvantiert)"
+
+    risikogruppen_schema:
+      ab_alter_jahre: 50
+      indikation: "Bestehende oder bevorstehende Immundefizienz"
+      dosen: 2
+      intervall_monate: 2
+
+    schwere_immunsupprimierte:
+      ab_alter_jahre: 18
+      dosen: 2
+      intervall_monate: "1–2 (idealerweise innerhalb 6 Monate)"
+
+  # ──────────── SAISONALE INFLUENZA ────────────
+  Influenza:
+    vollname: "Saisonale Influenza"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.5.c, 3.1.e"
+
+    grundimmunisierung:
+      ab_alter_jahre: 65
+      haeufigkeit: "jährlich"
+      bevorzugter_zeitraum: "Oktober bis Beginn der Grippewelle"
+
+    hochdosis_indikation:
+      ab_alter_jahre: 75
+      oder_ab_alter_mit_risiko: 65
+      impfstoff: "Hochdosis-Grippeimpfstoff (Efluelda)"
+
+    kinder_erstimpfung:
+      altersbereich_jahre: [0.5, 8]
+      dosen_erstes_jahr: 2
+      abstand_wochen: 4
+      dosen_folgende_jahre: 1
+
+  # ──────────── COVID-19 ────────────
+  Covid19:
+    vollname: "SARS-CoV-2 (Covid-19)"
+    empfehlungskategorie: ergaenzend
+    kapitel: "1.5.e, 3.1.k"
+
+    grundimmunisierung:
+      ab_alter_jahre: 65
+      haeufigkeit: "jährlich, Herbst/Winter"
+      dosen_pro_jahr: 1
+      min_abstand_seit_letzter_dosis_oder_infektion_monate: 6
+      bevorzugter_impfstoff: "Variantenangepasster Impfstoff"
+      empfohlener_zeitraum: "Oktober bis Dezember"
+
+    risikogruppen: "Siehe Kapitel 3.1.k"
+
+  # ──────────── RSV (PASSIVE IMMUNISIERUNG NEUGEBORENE) ────────────
+  RSV_passiv:
+    vollname: "Respiratorisches Synzytial-Virus – passive Immunisierung"
+    empfehlungskategorie: basisimpfung
+    kapitel: "1.1.a"
+
+    optionen:
+      maternale_impfung:
+        zielgruppe: "Schwangere Frauen ≥18 Jahre"
+        bedingung: "Voraussichtlicher Geburtstermin Oktober bis März"
+        impfstoff: "Abrysvo"
+        schwangerschaftswoche: { von: 32.0, bis: 36.0 }
+        ideal_min_wochen_vor_geburt: 5
+        dosen: 1
+        wiederholung_jede_schwangerschaft: false
+        hinweis: "Nicht empfohlen bei vorangegangener RSV-Impfung in früherer Schwangerschaft"
+
+      monoklonale_antikoerper:
+        zielgruppe: "Neugeborene und Säuglinge < 12 Monate"
+        produkt: "Nirsevimab (Beyfortus)"
+        zeitpunkt_nach_geburtsmonat:
+          oktober_bis_maerz: "Erste Lebenswoche oder so bald wie möglich danach"
+          april_bis_september: "Im Oktober oder so bald wie möglich danach"
+        max_alter: "Spätestens 1 Tag vor dem 1. Geburtstag"
+        hinweis_nach_maternaler_impfung: "Kein mAk erforderlich, ausser bei besonderen Situationen"
+
+  # ──────────── PERTUSSIS IN DER SCHWANGERSCHAFT ────────────
+  Pertussis_Schwangerschaft:
+    vollname: "Pertussis-Impfung in der Schwangerschaft (passive Immunisierung)"
+    empfehlungskategorie: basisimpfung
+    kapitel: "3.1.g"
+
+    schema:
+      jede_schwangerschaft: true
+      bevorzugter_zeitpunkt: "2. Trimester"
+      min_schwangerschaftswoche: 13
+      empfohlenes_fenster: "13.–26. SSW"
+      impfstoff: "dTpa"
+      dosen: 1
+      spaeteste_verabreichung: "14 Tage vor dem Geburtstermin"
+      min_abstand_seit_letzter_tetanus_wochen: 4
+
+# ═══════════════════════════════════════════════════════════════
+# ALTERSPEZIFISCHE IMPFZEITPUNKTE
+# Für die Generierung des persönlichen Impfplans
+# ═══════════════════════════════════════════════════════════════
+
+altersmeilensteine:
+  - alter_monate: 2
+    erwartet: [DTP, IPV, Hib, HBV, PCV_Kinder, RV, MenB]
+
+  - alter_monate: 4
+    erwartet: [DTP, IPV, Hib, HBV, PCV_Kinder, RV, MenB]
+
+  - alter_monate: 9
+    erwartet: [MMR, V]
+
+  - alter_monate: 12
+    erwartet: [DTP, IPV, Hib, HBV, PCV_Kinder, MMR, V, MenACWY, MenB]
+
+  - alter_jahre: [4, 7]
+    erwartet: [DTP, IPV]
+    typ: "Auffrischimpfung Vorschulalter"
+
+  - alter_jahre: [11, 15]
+    erwartet: [DTP, HPV, MenACWY, MenB]
+    optional: [HBV]
+    typ: "Auffrischimpfung Jugendliche"
+
+  - alter_jahre: 25
+    erwartet: [DTP]
+    typ: "Einmalige Pertussis-Auffrischung Erwachsene"
+
+  - alter_jahre: 45
+    erwartet: [DTP]
+    hinweis: "nur dT (kein reines dT verfügbar, dTpa oder dT-IPV verwenden)"
+    typ: "Auffrischimpfung Erwachsene"
+
+  - alter_jahre: 65
+    erwartet: [DTP, HZ, PCV_Erwachsene, Influenza, Covid19]
+    typ: "Impfungen ab 65 Jahren"
+
+  - ab_alter_jahre: 65
+    alle_jahre: 10
+    erwartet: [DTP]
+    typ: "Periodische dT-Auffrischimpfung"
+
+  - ab_alter_jahre: 65
+    alle_jahre: 1
+    erwartet: [Influenza, Covid19]
+    typ: "Jährliche saisonale Impfungen"

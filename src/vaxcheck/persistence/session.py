@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
@@ -10,8 +11,12 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from vaxcheck.persistence.models import Base
 
-_DEFAULT_DB_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data"
-DEFAULT_DB_PATH = _DEFAULT_DB_DIR / "vaxcheck.db"
+_env_url = os.environ.get("DATABASE_URL", "")
+if _env_url.startswith("sqlite:///"):
+    # Resolve relative paths from CWD (e.g. /app in Docker)
+    DEFAULT_DB_PATH = Path(_env_url[len("sqlite:///"):]).resolve()
+else:
+    DEFAULT_DB_PATH = Path(__file__).resolve().parent.parent.parent.parent / "data" / "vaxcheck.db"
 
 _engine: Engine | None = None
 _SessionLocal: sessionmaker[Session] | None = None

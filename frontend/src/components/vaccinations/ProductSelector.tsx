@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import type { VaccineProduct } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface ProductSelectorProps {
   value: string
@@ -17,6 +18,8 @@ interface ProductSelectorProps {
 }
 
 export function ProductSelector({ value, onChange }: ProductSelectorProps) {
+  const { t } = useTranslations()
+
   const { data: products, isLoading } = useSWR('products', () => api.catalog.products(), {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -26,10 +29,10 @@ export function ProductSelector({ value, onChange }: ProductSelectorProps) {
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger>
-        <SelectValue placeholder={isLoading ? 'Caricamento prodotti...' : 'Seleziona prodotto'} />
+        <SelectValue placeholder={isLoading ? t('productSelector.loading') : t('productSelector.placeholder')} />
       </SelectTrigger>
       <SelectContent>
-        {(products ?? []).map((p) => (
+        {(products ?? []).sort((a, b) => a.name.localeCompare(b.name)).map((p) => (
           <SelectItem key={p.name} value={p.name}>
             <div className="flex items-center gap-2 min-h-[44px]">
               <span className="font-medium">{p.name}</span>

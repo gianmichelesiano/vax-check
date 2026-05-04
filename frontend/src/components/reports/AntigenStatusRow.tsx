@@ -1,26 +1,32 @@
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import type { AntigenStatus } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface AntigenStatusRowProps {
   status: AntigenStatus
 }
 
-const priorityBadge = (s: AntigenStatus) => {
-  if (s.is_complete) return { variant: 'ok' as const, label: 'ok' }
-  for (const note of s.notes) {
-    if (note.includes('catchup') && note.includes('non più indicato'))
-      return { variant: 'muted' as const, label: 'non indicato' }
-    if (note.includes('catchup') || note.includes('recupero'))
-      return { variant: 'warning' as const, label: 'recupero' }
+function usePriorityBadge() {
+  const { t } = useTranslations()
+  return (s: AntigenStatus) => {
+    if (s.is_complete) return { variant: 'ok' as const, label: t('antigenStatus.complete') }
+    for (const note of s.notes) {
+      if (note.includes('catchup') && note.includes('non più indicato'))
+        return { variant: 'muted' as const, label: t('antigenStatus.notIndicated') }
+      if (note.includes('catchup') || note.includes('recupero'))
+        return { variant: 'warning' as const, label: t('antigenStatus.catchup') }
+    }
+    if (s.next_dose_due && s.next_dose_due <= new Date().toISOString().split('T')[0])
+      return { variant: 'urgent' as const, label: t('antigenStatus.urgent') }
+    if (s.next_dose_due) return { variant: 'warning' as const, label: t('antigenStatus.inProgress') }
+    return { variant: 'muted' as const, label: '—' }
   }
-  if (s.next_dose_due && s.next_dose_due <= new Date().toISOString().split('T')[0])
-    return { variant: 'urgent' as const, label: 'urgente' }
-  if (s.next_dose_due) return { variant: 'warning' as const, label: 'in corso' }
-  return { variant: 'muted' as const, label: '—' }
 }
 
 export function AntigenStatusRow({ status }: AntigenStatusRowProps) {
+  const priorityBadge = usePriorityBadge()
+  const { t } = useTranslations()
   const badge = priorityBadge(status)
 
   return (
@@ -30,14 +36,14 @@ export function AntigenStatusRow({ status }: AntigenStatusRowProps) {
           <span className="font-medium text-sm">{status.antigen}</span>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              {status.doses_received}/{status.doses_required} dosi
+              {t('antigenStatus.doses', { received: status.doses_received, required: status.doses_required })}
             </span>
             <Badge variant={badge.variant}>{badge.label}</Badge>
           </div>
         </div>
         <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
           {status.schema_followed && <span>{status.schema_followed}</span>}
-          {status.chapter_ref && <span>Cap. {status.chapter_ref}</span>}
+          {status.chapter_ref && <span>{t('antigenStatus.chapter', { ref: status.chapter_ref })}</span>}
         </div>
         {status.notes.length > 0 && (
           <div className="mt-1 text-xs text-muted-foreground">

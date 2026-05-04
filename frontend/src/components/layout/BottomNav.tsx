@@ -1,16 +1,19 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { Users, Settings } from 'lucide-react'
+import { Users, BookText, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 export function BottomNav() {
   const pathname = usePathname()
+  const { t } = useTranslations()
 
   const tabs = [
-    { href: '/', label: 'Pazienti', icon: Users },
-    { href: '/impostazioni', label: 'Impostazioni', icon: Settings },
+    { href: '/', label: t('nav.patients'), icon: Users },
+    { href: '/riferimenti', label: t('nav.references'), icon: BookText },
+    { href: '/impostazioni', label: t('nav.settings'), icon: Settings },
   ]
 
   return (

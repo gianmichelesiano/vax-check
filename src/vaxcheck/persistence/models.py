@@ -98,3 +98,23 @@ class ComplianceReportDB(Base):
 
     def __repr__(self) -> str:
         return f"<ComplianceReportDB {self.id} {self.evaluation_date} {'PASS' if self.overall_compliance else 'FAIL'}>"
+
+
+class OCRConsentDB(Base):
+    """Consenso OCR per paziente (privacy)."""
+
+    __tablename__ = "ocr_consents"
+
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+    patient_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    consented_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, default=lambda: datetime.now()
+    )
+    consented_by: Mapped[str] = mapped_column(String(50), default="farmacista")
+    revoked: Mapped[bool] = mapped_column(Boolean, default=False)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    def __repr__(self) -> str:
+        return f"<OCRConsentDB {self.id} patient={self.patient_id}>"

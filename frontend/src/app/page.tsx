@@ -11,8 +11,10 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { Plus, Users } from 'lucide-react'
 import type { Patient } from '@/lib/types'
 import { api } from '@/lib/api'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 export default function DashboardPage() {
+  const { t } = useTranslations()
   const [search, setSearch] = useState('')
   const [debounced, setDebounced] = useState('')
 
@@ -33,13 +35,13 @@ export default function DashboardPage() {
       <div className="flex-1 p-4 max-w-2xl mx-auto w-full">
         <div className="hidden md:flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Pazienti</h1>
-            <p className="text-muted-foreground text-sm">Gestisci la tua anagrafica vaccinale</p>
+            <h1 className="text-2xl font-bold">{t('dashboard.title')}</h1>
+            <p className="text-muted-foreground text-sm">{t('dashboard.subtitle')}</p>
           </div>
           <Link href="/pazienti/nuovo">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Nuovo paziente
+              {t('dashboard.newPatient')}
             </Button>
           </Link>
         </div>
@@ -71,12 +73,12 @@ export default function DashboardPage() {
         ) : debounced ? (
           <div className="text-center py-12 text-muted-foreground">
             <Users className="h-12 w-12 mx-auto mb-3 opacity-30" />
-            <p>Nessun paziente trovato per &quot;{debounced}&quot;</p>
+            <p>{t('dashboard.noResults', { search: debounced })}</p>
           </div>
         ) : (
           <div className="text-center py-12 text-muted-foreground">
             <Users className="h-12 w-12 mx-auto mb-3 opacity-30" />
-            <p>Nessun paziente. Crea il primo paziente.</p>
+            <p>{t('dashboard.empty')}</p>
           </div>
         )}
 

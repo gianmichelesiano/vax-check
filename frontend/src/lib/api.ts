@@ -23,6 +23,8 @@ import type {
   CreateRecordRequest,
   ComplianceReport,
   VaccineProduct,
+  ExtractionResult,
+  KBFullResponse,
 } from './types'
 
 export const api = {
@@ -55,5 +57,26 @@ export const api = {
   catalog: {
     products: () => apiFetch<VaccineProduct[]>('/api/catalog/products'),
     kbVersion: () => apiFetch<{ version: string; date: string }>('/api/kb/version'),
+    full: () => apiFetch<KBFullResponse>('/api/kb/full'),
+  },
+  ocr: {
+    extract: async (image: Blob, patientId?: string): Promise<ExtractionResult> => {
+      const form = new FormData()
+      form.append('image', image, 'booklet.jpg')
+      if (patientId) form.append('patient_id', patientId)
+      const res = await fetch(`${BASE}/api/ocr/extract`, { method: 'POST', body: form })
+      if (!res.ok) {
+        const err = await res.text()
+        throw new Error(`OCR ${res.status}: ${err}`)
+      }
+      return res.json()
+    },
+    consent: (patientId: string) =>
+      apiFetch<{ status: string }>(`/api/ocr/consent/${patientId}`, { method: 'POST' }),
+    confirm: (patientId: string, records: CreateRecordRequest[]) =>
+      apiFetch<{ added: number; report_id: string; overall_compliance: boolean }>(
+        '/api/ocr/confirm',
+        { method: 'POST', body: JSON.stringify({ patient_id: patientId, confirmed_records: records }) },
+      ),
   },
 }

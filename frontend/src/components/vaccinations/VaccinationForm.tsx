@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { ProductSelector } from '@/components/vaccinations/ProductSelector'
 import { api } from '@/lib/api'
 import type { CreateRecordRequest } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface VaccinationFormProps {
   patientId: string
@@ -15,6 +16,7 @@ interface VaccinationFormProps {
 }
 
 export function VaccinationForm({ patientId, onSuccess, onCancel }: VaccinationFormProps) {
+  const { t } = useTranslations()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [productName, setProductName] = useState('')
@@ -24,8 +26,8 @@ export function VaccinationForm({ patientId, onSuccess, onCancel }: VaccinationF
 
   function validate(): boolean {
     const e: Record<string, string> = {}
-    if (!productName) e.product_name = 'Seleziona un prodotto'
-    if (!adminDate) e.administration_date = 'Obbligatoria'
+    if (!productName) e.product_name = t('vaccinationForm.error.productRequired')
+    if (!adminDate) e.administration_date = t('vaccinationForm.error.dateRequired')
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -44,7 +46,7 @@ export function VaccinationForm({ patientId, onSuccess, onCancel }: VaccinationF
       await api.records.add(patientId, data)
       onSuccess?.()
     } catch (err) {
-      setErrors({ form: err instanceof Error ? err.message : 'Errore sconosciuto' })
+      setErrors({ form: err instanceof Error ? err.message : t('vaccinationForm.error.unknown') })
     } finally {
       setLoading(false)
     }
@@ -53,13 +55,13 @@ export function VaccinationForm({ patientId, onSuccess, onCancel }: VaccinationF
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
-        <Label>Prodotto</Label>
+        <Label>{t('vaccinationForm.product')}</Label>
         <ProductSelector value={productName} onChange={setProductName} />
         {errors.product_name && <p className="text-sm text-destructive">{errors.product_name}</p>}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="admin_date">Data somministrazione</Label>
+        <Label htmlFor="admin_date">{t('vaccinationForm.adminDate')}</Label>
         <Input
           id="admin_date"
           type="date"
@@ -73,22 +75,22 @@ export function VaccinationForm({ patientId, onSuccess, onCancel }: VaccinationF
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="lot">Lotto</Label>
+        <Label htmlFor="lot">{t('vaccinationForm.lot')}</Label>
         <Input
           id="lot"
           value={lotNumber}
           onChange={(e) => setLotNumber(e.target.value)}
-          placeholder="Opzionale"
+          placeholder={t('vaccinationForm.lotPlaceholder')}
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="notes">Note</Label>
+        <Label htmlFor="notes">{t('vaccinationForm.notes')}</Label>
         <Input
           id="notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Note opzionali"
+          placeholder={t('vaccinationForm.notesPlaceholder')}
         />
       </div>
 
@@ -101,11 +103,11 @@ export function VaccinationForm({ patientId, onSuccess, onCancel }: VaccinationF
       <div className="flex gap-2 pt-2">
         {onCancel && (
           <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
-            Annulla
+            {t('vaccinationForm.cancel')}
           </Button>
         )}
         <Button type="submit" className="flex-1" disabled={loading}>
-          {loading ? 'Salvataggio...' : 'Salva'}
+          {loading ? t('vaccinationForm.saving') : t('vaccinationForm.save')}
         </Button>
       </div>
     </form>

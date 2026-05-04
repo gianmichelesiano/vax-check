@@ -34,14 +34,20 @@ export function formatDate(dateStr: string): string {
   })
 }
 
-export function ageLabel(years: number): string {
-  if (years < 1) return '< 1 anno'
-  if (years === 1) return '1 anno'
-  return `${years} anni`
+export function ageLabel(
+  years: number,
+  t: (key: string, params?: Record<string, string | number>) => string,
+): string {
+  if (years < 1) return t('common.lessThanYear')
+  if (years === 1) return t('common.year')
+  return t('common.years', { years })
 }
 
-export function sexLabel(sex: string): string {
-  if (sex === 'M') return 'Maschio'
-  if (sex === 'F') return 'Femmina'
-  return 'Altro'
+export function sexLabel(
+  sex: string,
+  t: (key: string, params?: Record<string, string | number>) => string,
+): string {
+  if (sex === 'M') return t('common.male')
+  if (sex === 'F') return t('common.female')
+  return t('common.other')
 }

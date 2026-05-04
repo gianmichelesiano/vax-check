@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/button'
 import { ReportTabs } from '@/components/reports/ReportTabs'
 import { Loader2, ArrowLeft, AlertCircle } from 'lucide-react'
 import { api } from '@/lib/api'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 export default function ReportPage() {
   const params = useParams()
   const id = params.id as string
+  const { t } = useTranslations()
 
   const { data: report, isLoading, error } = useSWR(
     ['report', id],
@@ -26,21 +28,21 @@ export default function ReportPage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <h1 className="text-xl font-bold">Analisi vaccinale</h1>
+        <h1 className="text-xl font-bold">{t('reportPage.title')}</h1>
       </div>
 
       {isLoading && (
         <div className="flex flex-col items-center gap-3 py-12 text-muted-foreground">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <p>Analisi in corso...</p>
+          <p>{t('reportPage.loading')}</p>
         </div>
       )}
 
       {error && (
         <div className="text-center py-12">
-          <p className="text-destructive mb-2">Errore nel caricamento dell&apos;analisi.</p>
+          <p className="text-destructive mb-2">{t('reportPage.error')}</p>
           <Button variant="outline" onClick={() => window.location.reload()}>
-            Riprova
+            {t('reportPage.retry')}
           </Button>
         </div>
       )}
@@ -48,10 +50,10 @@ export default function ReportPage() {
       {!isLoading && !error && !report && (
         <div className="text-center py-12 text-muted-foreground">
           <AlertCircle className="h-12 w-12 mx-auto mb-3 opacity-30" />
-          <p className="mb-2">Nessuna analisi disponibile.</p>
-          <p className="text-sm mb-4">Torna alla scheda e clicca Analizza.</p>
+          <p className="mb-2">{t('reportPage.noAnalysis')}</p>
+          <p className="text-sm mb-4">{t('reportPage.noAnalysisHint')}</p>
           <Link href={`/pazienti/${id}`}>
-            <Button variant="outline">Vai alla scheda</Button>
+            <Button variant="outline">{t('reportPage.goToProfile')}</Button>
           </Link>
         </div>
       )}
@@ -60,7 +62,7 @@ export default function ReportPage() {
         <>
           <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
             <span>
-              Analisi del{' '}
+              {t('reportPage.analysisOf')}{' '}
               {new Date(report.evaluation_date).toLocaleDateString('de-CH')}
             </span>
             <span>·</span>
@@ -72,7 +74,7 @@ export default function ReportPage() {
 
           {report.warnings.length > 0 && (
             <div className="mt-4 rounded-md bg-amber-50 border border-amber-200 p-3">
-              <p className="text-sm font-medium text-amber-700 mb-1">Avvertenze</p>
+              <p className="text-sm font-medium text-amber-700 mb-1">{t('reportPage.warnings')}</p>
               {report.warnings.map((w, i) => (
                 <p key={i} className="text-xs text-amber-600">{w}</p>
               ))}

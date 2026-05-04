@@ -1,5 +1,7 @@
 'use client'
 
+'use client'
+
 import {
   Dialog,
   DialogContent,
@@ -13,6 +15,7 @@ import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import type { VaccinationRecord } from '@/lib/types'
 import { api } from '@/lib/api'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface VaccinationListProps {
   records: VaccinationRecord[]
@@ -21,6 +24,7 @@ interface VaccinationListProps {
 }
 
 export function VaccinationList({ records, patientId, onDelete }: VaccinationListProps) {
+  const { t } = useTranslations()
   const [deleting, setDeleting] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
 
@@ -39,7 +43,7 @@ export function VaccinationList({ records, patientId, onDelete }: VaccinationLis
   if (records.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
-        <p>Nessuna vaccinazione registrata.</p>
+        <p>{t('vaccinationList.empty')}</p>
       </div>
     )
   }
@@ -79,21 +83,21 @@ export function VaccinationList({ records, patientId, onDelete }: VaccinationLis
       <Dialog open={!!confirmId} onOpenChange={() => setConfirmId(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Eliminare questa vaccinazione?</DialogTitle>
+            <DialogTitle>{t('vaccinationList.deleteTitle')}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            L&apos;operazione non può essere annullata.
+            {t('vaccinationList.deleteWarning')}
           </p>
           <div className="flex gap-2 justify-end mt-4">
             <Button variant="outline" onClick={() => setConfirmId(null)}>
-              Annulla
+              {t('vaccinationList.cancel')}
             </Button>
             <Button
               variant="destructive"
               onClick={() => confirmId && handleDelete(confirmId)}
               disabled={deleting === confirmId}
             >
-              Elimina
+              {t('vaccinationList.delete')}
             </Button>
           </div>
         </DialogContent>

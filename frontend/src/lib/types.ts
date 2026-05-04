@@ -104,10 +104,80 @@ export interface CreatePatientRequest {
   notes?: string
 }
 
+export interface ExtractedVaccination {
+  product_name_raw: string
+  product_name_normalized: string | null
+  administration_date: string | null
+  lot_number: string | null
+  confidence: number
+  needs_review: boolean
+  review_reason: string | null
+}
+
+export interface ExtractionResult {
+  extractions: ExtractedVaccination[]
+  total_found: number
+  low_confidence_count: number
+  unrecognized_products: string[]
+  warnings: string[]
+  processing_time_ms: number
+}
+
 export interface CreateRecordRequest {
   product_name: string
   administration_date: string
   lot_number?: string
   administered_by?: string
   notes?: string
+}
+
+export interface KBAntigen {
+  code: string
+  full_name: string
+  recommendation_level: string
+  chapter_ref?: string
+  primary_schedule_summary?: string
+  boosters_summary?: string
+}
+
+export interface KBProduct {
+  name: string
+  aliases: string[]
+  manufacturer?: string
+  antigens: string[]
+  age_range?: Record<string, number>
+  notes?: string
+}
+
+export interface DeprecatedProduct {
+  name: string
+  reason: string
+}
+
+export interface RiskGroupItem {
+  code: string
+  label: string
+  recommended: string[]
+  severity_threshold?: string
+  note?: string
+}
+
+export interface RiskGroups {
+  clinical_conditions: RiskGroupItem[]
+  occupational: RiskGroupItem[]
+  pregnancy: RiskGroupItem[]
+}
+
+export interface KBFullResponse {
+  metadata: {
+    version: string
+    publication_date: string
+    source: string
+    reference_url?: string
+  }
+  antigens: KBAntigen[]
+  products: KBProduct[]
+  deprecated_products: DeprecatedProduct[]
+  risk_groups: RiskGroups
+  changelog: string
 }

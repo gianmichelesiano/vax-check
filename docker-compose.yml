@@ -8,6 +8,7 @@ services:
     volumes:
       - ./data:/app/data
       - ./kb:/app/kb:ro
+    env_file: .env
     environment:
       - DATABASE_URL=sqlite:///./data/vaxcheck.db
     command: uvicorn vaxcheck.api.main:app --host 0.0.0.0 --port 8000

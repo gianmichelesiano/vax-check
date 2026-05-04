@@ -1,19 +1,24 @@
 import { Badge } from '@/components/ui/badge'
 import type { MissingVaccine } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface MissingVaccineCardProps {
   missing: MissingVaccine
 }
 
-const priorityConfig: Record<string, { variant: 'urgent' | 'warning' | 'muted'; label: string }> = {
-  urgent: { variant: 'urgent', label: 'Urgente' },
-  due_now: { variant: 'urgent', label: 'Scaduta' },
-  upcoming: { variant: 'warning', label: 'Prossima' },
-  catchup_available: { variant: 'warning', label: 'Recupero' },
-  catchup_closed: { variant: 'muted', label: 'Non più indicata' },
+function buildPriorityConfig(t: (key: string, params?: Record<string, string | number>) => string) {
+  return {
+    urgent: { variant: 'urgent' as const, label: t('missingVaccine.urgent') },
+    due_now: { variant: 'urgent' as const, label: t('missingVaccine.dueNow') },
+    upcoming: { variant: 'warning' as const, label: t('missingVaccine.upcoming') },
+    catchup_available: { variant: 'warning' as const, label: t('missingVaccine.catchupAvailable') },
+    catchup_closed: { variant: 'muted' as const, label: t('missingVaccine.catchupClosed') },
+  }
 }
 
 export function MissingVaccineCard({ missing }: MissingVaccineCardProps) {
+  const { t } = useTranslations()
+  const priorityConfig = buildPriorityConfig(t)
   const config = priorityConfig[missing.priority] ?? { variant: 'muted' as const, label: missing.priority }
 
   return (
@@ -25,11 +30,13 @@ export function MissingVaccineCard({ missing }: MissingVaccineCardProps) {
       <p className="text-sm text-muted-foreground">{missing.reason}</p>
       <div className="text-xs text-muted-foreground">
         <span>{missing.recommended_schedule}</span>
-        {missing.chapter_ref && <span className="ml-2">Cap. {missing.chapter_ref}</span>}
+        {missing.chapter_ref && <span className="ml-2">{t('missingVaccine.chapter', { ref: missing.chapter_ref })}</span>}
       </div>
       {missing.age_window && (
         <div className="text-xs text-muted-foreground">
-          Finestra: {missing.age_window[0]}–{missing.age_window[1]} anni
+          {missing.age_window[1] === 1
+            ? t('missingVaccine.ageWindowYear', { min: missing.age_window[0], max: missing.age_window[1] })
+            : t('missingVaccine.ageWindow', { min: missing.age_window[0], max: missing.age_window[1] })}
         </div>
       )}
     </div>

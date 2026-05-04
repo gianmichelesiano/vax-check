@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select'
 import { api } from '@/lib/api'
 import type { CreatePatientRequest, Sex } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface PatientFormProps {
   onSuccess?: (patientId: string) => void
@@ -21,6 +22,7 @@ interface PatientFormProps {
 
 export function PatientForm({ onSuccess }: PatientFormProps) {
   const router = useRouter()
+  const { t } = useTranslations()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -32,10 +34,10 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
 
   function validate(): boolean {
     const e: Record<string, string> = {}
-    if (givenName.trim().length < 2) e.given_name = 'Minimo 2 caratteri'
-    if (familyName.trim().length < 2) e.family_name = 'Minimo 2 caratteri'
-    if (!birthDate) e.birth_date = 'Obbligatoria'
-    if (!sex) e.sex = 'Obbligatorio'
+    if (givenName.trim().length < 2) e.given_name = t('patientForm.error.minLength')
+    if (familyName.trim().length < 2) e.family_name = t('patientForm.error.minLength')
+    if (!birthDate) e.birth_date = t('patientForm.error.required')
+    if (!sex) e.sex = t('patientForm.error.required')
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -59,7 +61,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
         router.push(`/pazienti/${patient.id}`)
       }
     } catch (err) {
-      setErrors({ form: err instanceof Error ? err.message : 'Errore sconosciuto' })
+      setErrors({ form: err instanceof Error ? err.message : t('patientForm.error.unknown') })
     } finally {
       setLoading(false)
     }
@@ -68,7 +70,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
-        <Label htmlFor="given_name">Nome</Label>
+        <Label htmlFor="given_name">{t('patientForm.name')}</Label>
         <Input
           id="given_name"
           value={givenName}
@@ -79,7 +81,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="family_name">Cognome</Label>
+        <Label htmlFor="family_name">{t('patientForm.surname')}</Label>
         <Input
           id="family_name"
           value={familyName}
@@ -90,7 +92,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="birth_date">Data di nascita</Label>
+        <Label htmlFor="birth_date">{t('patientForm.birthDate')}</Label>
         <Input
           id="birth_date"
           type="date"
@@ -103,27 +105,27 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="sex">Sesso</Label>
+        <Label htmlFor="sex">{t('patientForm.sex')}</Label>
         <Select value={sex} onValueChange={(v) => setSex(v as Sex)}>
           <SelectTrigger id="sex">
-            <SelectValue placeholder="Seleziona sesso" />
+            <SelectValue placeholder={t('patientForm.sexPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="M">Maschio</SelectItem>
-            <SelectItem value="F">Femmina</SelectItem>
-            <SelectItem value="X">Altro</SelectItem>
+            <SelectItem value="M">{t('patientForm.male')}</SelectItem>
+            <SelectItem value="F">{t('patientForm.female')}</SelectItem>
+            <SelectItem value="X">{t('patientForm.other')}</SelectItem>
           </SelectContent>
         </Select>
         {errors.sex && <p className="text-sm text-destructive">{errors.sex}</p>}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="notes">Note</Label>
+        <Label htmlFor="notes">{t('patientForm.notes')}</Label>
         <Input
           id="notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Note opzionali"
+          placeholder={t('patientForm.notesPlaceholder')}
         />
       </div>
 
@@ -134,7 +136,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
       )}
 
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? 'Salvataggio...' : 'Salva paziente'}
+        {loading ? t('patientForm.saving') : t('patientForm.save')}
       </Button>
     </form>
   )

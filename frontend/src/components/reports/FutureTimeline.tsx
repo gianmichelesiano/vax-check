@@ -1,20 +1,23 @@
 import { cn } from '@/lib/utils'
 import type { FuturePlanItem } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface FutureTimelineProps {
   items: FuturePlanItem[]
 }
 
-function formatTarget(age: number | [number, number]): string {
-  if (typeof age === 'number') return `${age} anni`
-  return `${age[0]}–${age[1]} anni`
+function formatTarget(age: number | [number, number], t: (key: string, params?: Record<string, string | number>) => string): string {
+  if (typeof age === 'number') return t('futureTimeline.years', { age })
+  return `${t('futureTimeline.years', { age: age[0] })}–${t('futureTimeline.years', { age: age[1] })}`
 }
 
 export function FutureTimeline({ items }: FutureTimelineProps) {
+  const { t } = useTranslations()
+
   if (items.length === 0) {
     return (
       <p className="text-center py-8 text-muted-foreground">
-        Nessuna vaccinazione futura pianificata.
+        {t('futureTimeline.empty')}
       </p>
     )
   }
@@ -48,9 +51,9 @@ export function FutureTimeline({ items }: FutureTimelineProps) {
             <span className="text-muted-foreground"> — {item.plan_type}</span>
           </div>
           <div className="text-xs text-muted-foreground mt-0.5">
-            {formatTarget(item.target_age_years)}
-            {item.target_date_estimate && ` · stima ${item.target_date_estimate}`}
-            {item.chapter_ref && ` · Cap. ${item.chapter_ref}`}
+            {formatTarget(item.target_age_years, t)}
+            {item.target_date_estimate && ` · ${t('futureTimeline.estimated', { date: item.target_date_estimate })}`}
+            {item.chapter_ref && ` · ${t('futureTimeline.chapter', { ref: item.chapter_ref })}`}
           </div>
         </div>
       ))}

@@ -3,6 +3,7 @@
 import { cn, initials, avatarColor, ageLabel } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import type { Patient } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 interface PatientCardProps {
   patient: Patient
@@ -11,7 +12,8 @@ interface PatientCardProps {
 }
 
 export function PatientCard({ patient, compact, selected }: PatientCardProps) {
-  const badge = { label: 'Analisi richiesta', variant: 'muted' as const }
+  const { t } = useTranslations()
+  const badge = { label: t('patientCard.analysisRequested'), variant: 'muted' as const }
 
   if (compact) {
     return (
@@ -33,7 +35,7 @@ export function PatientCard({ patient, compact, selected }: PatientCardProps) {
           <div className="text-sm font-medium truncate">
             {patient.given_name} {patient.family_name}
           </div>
-          <div className="text-xs text-muted-foreground">{ageLabel(patient.age_years)}</div>
+          <div className="text-xs text-muted-foreground">{ageLabel(patient.age_years, t)}</div>
         </div>
       </div>
     )
@@ -56,7 +58,7 @@ export function PatientCard({ patient, compact, selected }: PatientCardProps) {
           </div>
           <Badge variant={badge.variant}>{badge.label}</Badge>
         </div>
-        <div className="text-sm text-muted-foreground">{ageLabel(patient.age_years)}</div>
+        <div className="text-sm text-muted-foreground">{ageLabel(patient.age_years, t)}</div>
       </div>
     </div>
   )

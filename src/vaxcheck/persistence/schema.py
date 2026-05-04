@@ -8,7 +8,7 @@ from __future__ import annotations
 from sqlalchemy import Column, Connection, Integer, MetaData, Table, text
 from sqlalchemy.engine import Engine
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 _SCHEMA_VERSION_TABLE = Table(
     "_schema_version",
@@ -42,13 +42,15 @@ def run_migrations(engine: Engine) -> None:
             _migrate_v0_to_v1(conn)
             set_schema_version(conn, 1)
 
-        # future migrations: if current < 2: _migrate_v1_to_v2(conn); set_schema_version(conn, 2)
+        if current < 2:
+            _migrate_v1_to_v2(conn)
+            set_schema_version(conn, 2)
 
 
 def _migrate_v0_to_v1(conn: Connection) -> None:
-    """Baseline — all tables already created by Base.metadata.create_all().
-
-    This migration just marks version 1. Future schema changes will
-    add actual DDL here.
-    """
+    """Baseline — all tables already created by Base.metadata.create_all()."""
     pass
+
+
+def _migrate_v1_to_v2(conn: Connection) -> None:
+    """ocr_consents table — handled by Base.metadata.create_all()."""

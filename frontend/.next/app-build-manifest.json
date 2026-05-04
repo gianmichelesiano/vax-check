@@ -1,109 +1,20 @@
 {
   "pages": {
-    "/_not-found/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/app/_not-found/page-0b5675f383327395.js"
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
     ],
     "/layout": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/css/adc2ce7d0cc30b98.css",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/648-46e55a563dcb42f1.js",
-      "static/chunks/app/layout-d99fcab0999c7b27.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/impostazioni/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/405-88216a429d14068a.js",
-      "static/chunks/app/impostazioni/page-bb39e005bc9b65ac.js"
-    ],
-    "/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/648-46e55a563dcb42f1.js",
-      "static/chunks/405-88216a429d14068a.js",
-      "static/chunks/app/page-b393f7a6e9e445c1.js"
-    ],
-    "/pazienti/nuovo/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/648-46e55a563dcb42f1.js",
-      "static/chunks/31-8333522e1f3cfae1.js",
-      "static/chunks/547-bb7c5ba74098b490.js",
-      "static/chunks/app/pazienti/nuovo/page-f02304e23c16545b.js"
-    ],
-    "/pazienti/[id]/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/648-46e55a563dcb42f1.js",
-      "static/chunks/405-88216a429d14068a.js",
-      "static/chunks/31-8333522e1f3cfae1.js",
-      "static/chunks/547-bb7c5ba74098b490.js",
-      "static/chunks/316-3869155cf2d81721.js",
-      "static/chunks/app/pazienti/[id]/page-2c63a7a60a73d1b8.js"
-    ],
-    "/pazienti/[id]/layout": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/app/pazienti/[id]/layout-87260648f9322d62.js"
-    ],
-    "/pazienti/[id]/vaccini/nuovo/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/648-46e55a563dcb42f1.js",
-      "static/chunks/405-88216a429d14068a.js",
-      "static/chunks/31-8333522e1f3cfae1.js",
-      "static/chunks/547-bb7c5ba74098b490.js",
-      "static/chunks/app/pazienti/[id]/vaccini/nuovo/page-615ec082d8952e58.js"
-    ],
-    "/pazienti/[id]/vaccini/nuovo/layout": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/app/pazienti/[id]/vaccini/nuovo/layout-38b2b52b333d0e97.js"
-    ],
-    "/pazienti/[id]/report/page": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/590-546d1ffb2b5011e2.js",
-      "static/chunks/648-46e55a563dcb42f1.js",
-      "static/chunks/405-88216a429d14068a.js",
-      "static/chunks/31-8333522e1f3cfae1.js",
-      "static/chunks/440-6a76a86d9dc56e48.js",
-      "static/chunks/app/pazienti/[id]/report/page-6caa5e2eb5ae141d.js"
-    ],
-    "/pazienti/[id]/report/layout": [
-      "static/chunks/webpack-63ff3dccb86087c7.js",
-      "static/chunks/fd9d1056-7921bcddc878b7be.js",
-      "static/chunks/117-d87557fc4ccb62e9.js",
-      "static/chunks/main-app-4823d7e8951a7d66.js",
-      "static/chunks/app/pazienti/[id]/report/layout-d5594ca65135a8aa.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/impostazioni/page.js"
     ]
   }
 }

@@ -22,9 +22,11 @@ import {
   Activity,
   Shield,
   AlertTriangle,
+  Scan,
 } from 'lucide-react'
 import { useState } from 'react'
 import type { PatientWithRecords, ComplianceReport } from '@/lib/types'
+import { useTranslations } from '@/i18n/I18nProvider'
 
 function MetricCard({
   label,
@@ -57,6 +59,7 @@ export default function PatientDetailPage() {
   const params = useParams()
   const router = useRouter()
   const id = params.id as string
+  const { t, locale } = useTranslations()
 
   const { data: patient, isLoading, mutate } = useSWR(
     ['patient', id],
@@ -96,9 +99,9 @@ export default function PatientDetailPage() {
   if (!patient) {
     return (
       <div className="max-w-lg mx-auto p-4 text-center py-12">
-        <p className="text-muted-foreground">Paziente non trovato.</p>
+        <p className="text-muted-foreground">{t('patient.detail.notFound')}</p>
         <Link href="/">
-          <Button variant="outline" className="mt-4">Torna alla lista</Button>
+          <Button variant="outline" className="mt-4">{t('patient.detail.backToList')}</Button>
         </Link>
       </div>
     )
@@ -121,8 +124,8 @@ export default function PatientDetailPage() {
             {patient.given_name} {patient.family_name}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {sexLabel(patient.sex)} · {ageLabel(patient.age_years)} ·{' '}
-            nato il {formatDate(patient.birth_date)}
+            {sexLabel(patient.sex, t)} {t('common.and')} {ageLabel(patient.age_years, t)} {t('common.and')}{' '}
+            {patient.sex === 'F' ? t('patient.detail.femaleBorn') : t('patient.detail.bornOn')} {formatDate(patient.birth_date)}
           </p>
         </div>
       </div>
@@ -131,19 +134,25 @@ export default function PatientDetailPage() {
         <Link href={`/pazienti/${id}/report`} className="flex-1">
           <Button variant="outline" className="w-full">
             <Activity className="h-4 w-4 mr-2" />
-            Analizza
+            {t('patient.detail.analyze')}
+          </Button>
+        </Link>
+        <Link href={`/pazienti/${id}/scansiona`} className="flex-1">
+          <Button variant="outline" className="w-full">
+            <Scan className="h-4 w-4 mr-2" />
+            {t('patient.detail.scan')}
           </Button>
         </Link>
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button className="flex-1">
               <Plus className="h-4 w-4 mr-2" />
-              Vaccinazione
+              {t('patient.detail.vaccination')}
             </Button>
           </SheetTrigger>
           <SheetContent side="bottom" className="h-[85vh] overflow-y-auto">
             <div className="max-w-md mx-auto">
-              <h2 className="text-lg font-bold mb-4">Aggiungi vaccinazione</h2>
+              <h2 className="text-lg font-bold mb-4">{t('patient.detail.addVaccination')}</h2>
               <VaccinationForm
                 patientId={id}
                 onSuccess={() => {
@@ -160,19 +169,19 @@ export default function PatientDetailPage() {
       {report && (
         <div className="grid grid-cols-3 gap-2 mb-4">
           <MetricCard
-            label="Somministrazioni"
+            label={t('patient.detail.metrics.vaccinations')}
             value={report.total_records}
             icon={Activity}
             variant="default"
           />
           <MetricCard
-            label="Antigeni ok"
+            label={t('patient.detail.metrics.antigensOk')}
             value={`${completeCount}/${totalAntigens}`}
             icon={Shield}
             variant="ok"
           />
           <MetricCard
-            label="Mancanti"
+            label={t('patient.detail.metrics.missing')}
             value={missingCount}
             icon={AlertTriangle}
             variant={missingCount > 0 ? 'warning' : 'ok'}
@@ -182,13 +191,13 @@ export default function PatientDetailPage() {
 
       {patient.notes && (
         <div className="rounded-md bg-muted p-3 mb-4 text-sm">
-          <span className="font-medium">Note: </span>
+          <span className="font-medium">{t('patient.detail.notes')} </span>
           {patient.notes}
         </div>
       )}
 
       <div className="mt-6">
-        <h2 className="text-lg font-semibold mb-3">Vaccinazioni registrate</h2>
+        <h2 className="text-lg font-semibold mb-3">{t('patient.detail.registeredVaccinations')}</h2>
         <VaccinationList
           records={(patient as PatientWithRecords).records ?? []}
           patientId={id}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from typing import Any
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -93,7 +94,55 @@ class VaccineProductOut(BaseModel):
     aliases: list[str] = Field(default_factory=list)
     manufacturer: str | None = None
     antigens: list[str]
+    age_range: dict[str, Any] | None = None
     notes: str | None = None
+
+
+class KBAntigenOut(BaseModel):
+    code: str
+    full_name: str
+    recommendation_level: str
+    chapter_ref: str | None = None
+    primary_schedule_summary: str | None = None
+    boosters_summary: str | None = None
+    raw: dict[str, Any]
+
+
+class KBProductOut(BaseModel):
+    name: str
+    aliases: list[str] = Field(default_factory=list)
+    manufacturer: str | None = None
+    antigens: list[str]
+    age_range: dict[str, Any] | None = None
+    notes: str | None = None
+
+
+class DeprecatedProductOut(BaseModel):
+    name: str
+    reason: str
+
+
+class RiskGroupItemOut(BaseModel):
+    code: str
+    label: str
+    recommended: list[str]
+    severity_threshold: str | None = None
+    note: str | None = None
+
+
+class RiskGroupsOut(BaseModel):
+    clinical_conditions: list[RiskGroupItemOut] = Field(default_factory=list)
+    occupational: list[RiskGroupItemOut] = Field(default_factory=list)
+    pregnancy: list[RiskGroupItemOut] = Field(default_factory=list)
+
+
+class KBFullOut(BaseModel):
+    metadata: dict[str, Any]
+    antigens: list[KBAntigenOut]
+    products: list[KBProductOut]
+    deprecated_products: list[DeprecatedProductOut]
+    risk_groups: RiskGroupsOut
+    changelog: str
 
 
 class CreatePatientRequest(BaseModel):

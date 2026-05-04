@@ -42,3 +42,7 @@ Thumbs.db
 *.db
 node_modules/
 frontend/node_modules/
+
+clara_vaccini.pdf
+clara_vaccini.jpg
+kb/

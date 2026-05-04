@@ -1,4 +1,4 @@
-// File: /home/gio/vax-check/frontend/src/app/layout.tsx
+// File: /Users/gianmichele/Development/Personal/vax-check/frontend/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

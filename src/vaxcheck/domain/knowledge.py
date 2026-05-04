@@ -14,7 +14,7 @@ class VaccineProduct(BaseModel):
     aliases: list[str] = Field(default_factory=list)
     manufacturer: str | None = None
     antigens: list[str]
-    age_range: dict[str, Any] | None = None
+    age_range: dict[str, Any] | None = Field(default=None)
     notes: str | None = None
 
 

@@ -44,6 +44,7 @@ class VaccinationRecordOut(BaseModel):
 
 class AntigenStatusOut(BaseModel):
     antigen: str
+    full_name: str | None = None
     is_complete: bool
     doses_received: int
     doses_required: int

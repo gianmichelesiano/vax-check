@@ -16,7 +16,8 @@ export default function ReportPage() {
 
   const { data: report, isLoading, error } = useSWR(
     ['report', id],
-    () => api.analysis.getLatest(id),
+    () => api.analysis.run(id),
+    { revalidateOnFocus: false },
   )
 
   return (

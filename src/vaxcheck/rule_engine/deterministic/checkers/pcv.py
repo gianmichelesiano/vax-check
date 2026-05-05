@@ -36,12 +36,10 @@ class PCVChecker(AntigenChecker):
         required = 3
         age_y, _ = age_at_date(person.birth_date, evaluation_date)
 
-        if dose_count >= required:
-            complete = True
-        elif age_y >= 5:
-            complete = True  # Past catchup window
-        else:
-            complete = False
+        complete = dose_count >= required
+        notes: list[str] = []
+        if not complete and age_y >= 5:
+            notes.append("catchup_closed")
 
         last_dose_date = relevant[-1].administration_date if relevant else None
 
@@ -52,6 +50,7 @@ class PCVChecker(AntigenChecker):
             doses_required=required,
             schema_followed="2+1",
             last_dose_date=last_dose_date,
+            notes=notes,
             chapter_ref=rule.chapter_ref,
         )
 
@@ -77,7 +76,18 @@ class PCVChecker(AntigenChecker):
                 )
             ]
 
-        return []
+        doses_missing = status.doses_required - status.doses_received
+        priority = MissingVaccinePriority.DUE_NOW if age_y >= 1 else MissingVaccinePriority.UPCOMING
+        return [
+            MissingVaccine(
+                antigen=self.antigen_code,
+                priority=priority,
+                reason=f"Schema 2+1 incompleto: {status.doses_received}/{status.doses_required} dosi",
+                recommended_schedule="2 mesi, 4 mesi, 12 mesi (schema 2+1)",
+                chapter_ref=rule.chapter_ref,
+                age_window=(0, 5),
+            )
+        ]
 
     def plan_future(
         self,

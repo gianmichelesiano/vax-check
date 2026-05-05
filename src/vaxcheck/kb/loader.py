@@ -66,6 +66,12 @@ _DE_KEY_MAP: dict[str, str] = {
     # Catalog
     "produkte": "products",
     "veraltete_produkte": "deprecated_products",
+    # Antigen code normalization (DE schedule keys → engine-canonical keys)
+    "PCV_Kinder": "PCV_pediatric",
+    "PCV_Erwachsene": "PCV_adult",
+    "MMR": "MOR",
+    "RSV_passiv": "RSV_passive",
+    "Pertussis_Schwangerschaft": "Pertussis_pregnancy",
     # URL
     "grund": "reason",
     "url": "reference_url",

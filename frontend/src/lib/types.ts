@@ -40,6 +40,7 @@ export type MissingVaccinePriority =
 
 export interface AntigenStatus {
   antigen: string
+  full_name?: string
   is_complete: boolean
   doses_received: number
   doses_required: number

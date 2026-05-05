@@ -12,6 +12,8 @@ function usePriorityBadge() {
   return (s: AntigenStatus) => {
     if (s.is_complete) return { variant: 'ok' as const, label: t('antigenStatus.complete') }
     for (const note of s.notes) {
+      if (note === 'catchup_closed')
+        return { variant: 'muted' as const, label: t('antigenStatus.catchupClosed') }
       if (note.includes('catchup') && note.includes('non più indicato'))
         return { variant: 'muted' as const, label: t('antigenStatus.notIndicated') }
       if (note.includes('catchup') || note.includes('recupero'))
@@ -33,7 +35,7 @@ export function AntigenStatusRow({ status }: AntigenStatusRowProps) {
     <div className="flex items-center gap-3 rounded-md border p-3 min-h-[52px]">
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-          <span className="font-medium text-sm">{status.antigen}</span>
+          <span className="font-medium text-sm">{status.full_name ?? status.antigen}</span>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
               {t('antigenStatus.doses', { received: status.doses_received, required: status.doses_required })}

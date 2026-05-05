@@ -17,7 +17,7 @@ from vaxcheck.rule_engine.deterministic.engine import DeterministicRuleEngine
 router = APIRouter(tags=["analysis"])
 
 
-def _report_to_out(report, db_patient) -> ComplianceReportOut:
+def _report_to_out(report, db_patient, kb: KnowledgeBase | None = None) -> ComplianceReportOut:
     person = report.person
     return ComplianceReportOut(
         patient=PatientOut(
@@ -38,6 +38,7 @@ def _report_to_out(report, db_patient) -> ComplianceReportOut:
         antigen_statuses={
             k: AntigenStatusOut(
                 antigen=v.antigen,
+                full_name=kb.antigens[k].full_name if kb and k in kb.antigens else None,
                 is_complete=v.is_complete,
                 doses_received=v.doses_received,
                 doses_required=v.doses_required,
@@ -101,7 +102,7 @@ def analyze_patient(
     report_repo.save(report, patient_id)
     db.commit()
 
-    return _report_to_out(report, db_patient)
+    return _report_to_out(report, db_patient, kb)
 
 
 @router.get("/patients/{patient_id}/reports/latest", response_model=ComplianceReportOut | None)

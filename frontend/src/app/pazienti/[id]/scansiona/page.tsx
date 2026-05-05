@@ -24,7 +24,8 @@ export default function ScansionaPage() {
   const { data: patient } = useSWR(['patient', id], () => api.patients.get(id))
 
   const [step, setStep] = useState<Step>('consent')
-  const [result, setResult] = useState<ExtractionResult | null>(null)
+  const [results, setResults] = useState<ExtractionResult[]>([])
+  const [savedExtractions, setSavedExtractions] = useState<import('@/lib/types').ExtractedVaccination[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const checkConsent = useCallback(async () => {
@@ -63,12 +64,17 @@ export default function ScansionaPage() {
         setStep('capture')
         return
       }
-      setResult(r)
+      setResults(prev => [...prev, r])
       setStep('review')
     } catch (err) {
       setError(userError(err instanceof Error ? err : new Error(String(err)), t))
       setStep('capture')
     }
+  }
+
+  const handleAddPage = (currentExtractions: import('@/lib/types').ExtractedVaccination[]) => {
+    setSavedExtractions(currentExtractions)
+    setStep('capture')
   }
 
   const handleConfirm = async (records: CreateRecordRequest[]) => {
@@ -135,16 +141,33 @@ export default function ScansionaPage() {
         <CameraCapture onCapture={handleCapture} onCancel={() => router.back()} />
       )}
 
-      {step === 'review' && result && (
+      {step === 'review' && results.length > 0 && (
         <ExtractionReview
-          result={result}
+          result={buildReviewResult(savedExtractions, results[results.length - 1])}
+          pageCount={results.length}
           patientId={id}
           onConfirm={handleConfirm}
+          onAddPage={handleAddPage}
           onManual={() => router.push(`/pazienti/${id}/vaccini/nuovo`)}
         />
       )}
     </div>
   )
+}
+
+function buildReviewResult(
+  saved: import('@/lib/types').ExtractedVaccination[],
+  latest: ExtractionResult,
+): ExtractionResult {
+  const all = [...saved, ...latest.extractions]
+  return {
+    extractions: all,
+    total_found: all.length,
+    low_confidence_count: all.filter(e => e.confidence < 0.8).length,
+    unrecognized_products: [...new Set(all.filter(e => !e.product_name_normalized).map(e => e.product_name_raw))],
+    warnings: latest.warnings,
+    processing_time_ms: latest.processing_time_ms,
+  }
 }
 
 function userError(err: Error, t: (key: string, params?: Record<string, string | number>) => string): string {

@@ -13,24 +13,28 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { api } from '@/lib/api'
-import type { CreatePatientRequest, Sex } from '@/lib/types'
+import type { CreatePatientRequest, Patient, Sex } from '@/lib/types'
 import { useTranslations } from '@/i18n/I18nProvider'
 
 interface PatientFormProps {
+  initialData?: Patient
+  patientId?: string
   onSuccess?: (patientId: string) => void
+  onCancel?: () => void
 }
 
-export function PatientForm({ onSuccess }: PatientFormProps) {
+export function PatientForm({ initialData, patientId, onSuccess, onCancel }: PatientFormProps) {
   const router = useRouter()
   const { t } = useTranslations()
+  const isEdit = Boolean(patientId && initialData)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const [givenName, setGivenName] = useState('')
-  const [familyName, setFamilyName] = useState('')
-  const [birthDate, setBirthDate] = useState('')
-  const [sex, setSex] = useState<Sex | ''>('')
-  const [notes, setNotes] = useState('')
+  const [givenName, setGivenName] = useState(initialData?.given_name ?? '')
+  const [familyName, setFamilyName] = useState(initialData?.family_name ?? '')
+  const [birthDate, setBirthDate] = useState(initialData?.birth_date ?? '')
+  const [sex, setSex] = useState<Sex | ''>(initialData?.sex ?? '')
+  const [notes, setNotes] = useState(initialData?.notes ?? '')
 
   function validate(): boolean {
     const e: Record<string, string> = {}
@@ -54,11 +58,18 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
         sex: sex as Sex,
         notes: notes.trim() || undefined,
       }
-      const patient = await api.patients.create(data)
-      if (onSuccess) {
-        onSuccess(patient.id)
+      let id: string
+      if (isEdit && patientId) {
+        await api.patients.update(patientId, data)
+        id = patientId
       } else {
-        router.push(`/pazienti/${patient.id}`)
+        const patient = await api.patients.create(data)
+        id = patient.id
+      }
+      if (onSuccess) {
+        onSuccess(id)
+      } else {
+        router.push(`/pazienti/${id}`)
       }
     } catch (err) {
       setErrors({ form: err instanceof Error ? err.message : t('patientForm.error.unknown') })
@@ -135,9 +146,16 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? t('patientForm.saving') : t('patientForm.save')}
-      </Button>
+      <div className="flex gap-2">
+        {onCancel && (
+          <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
+            {t('patient.delete.cancel')}
+          </Button>
+        )}
+        <Button type="submit" className="flex-1" disabled={loading}>
+          {loading ? t('patientForm.saving') : isEdit ? t('patientForm.update') : t('patientForm.save')}
+        </Button>
+      </div>
     </form>
   )
 }

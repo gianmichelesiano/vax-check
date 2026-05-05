@@ -9,7 +9,7 @@ from vaxcheck.domain.person import Person
 from vaxcheck.domain.vaccination import VaccinationRecord
 from vaxcheck.ocr.extractor import BookletExtractor
 from vaxcheck.ocr.models import ExtractionResult
-from vaxcheck.ocr.providers.claude import ClaudeProvider
+from vaxcheck.ocr.providers.factory import get_ocr_provider
 from vaxcheck.persistence.consent import ConsentRepository
 from vaxcheck.persistence.mappers import person_to_domain, record_to_domain
 from vaxcheck.persistence.repository import PatientRepository, RecordRepository, ReportRepository
@@ -48,12 +48,12 @@ async def extract_from_image(
     if len(content) > 10 * 1024 * 1024:
         raise HTTPException(400, "Immagine troppo grande (max 10MB)")
 
-    provider = ClaudeProvider()
+    provider = get_ocr_provider()
     if not provider.available:
         raise HTTPException(
             503,
-            "OCR non disponibile: ANTHROPIC_API_KEY non configurata. "
-            "Inserisci i dati manualmente.",
+            "OCR non disponibile: nessun provider configurato. "
+            "Aggiungi ANTHROPIC_API_KEY, DEEPSEEK_API_KEY, o OPENAI_API_KEY al .env.",
         )
 
     extractor = BookletExtractor(provider=provider, kb=kb)

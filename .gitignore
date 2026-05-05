@@ -40,6 +40,8 @@ Thumbs.db
 # Project (generated files at runtime)
 *.log
 *.db
+*.db-shm
+*.db-wal
 node_modules/
 frontend/node_modules/
 frontend/.next/
@@ -47,3 +49,5 @@ frontend/out/
 
 clara_vaccini.pdf
 clara_vaccini.jpg
+clara_vaccini_1.jpg
+clara_vaccini_2.jpg

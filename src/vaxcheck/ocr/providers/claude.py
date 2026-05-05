@@ -91,7 +91,8 @@ class ClaudeProvider:
             ],
         )
 
-        text = response.content[0].text.strip()
+        text_block = next(b for b in response.content if b.type == "text")
+        text = text_block.text.strip()
         if text.startswith("```"):
             text = text.split("```")[1]
             if text.startswith("json"):

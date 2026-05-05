@@ -4,18 +4,20 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ExtractionRow } from './ExtractionRow'
-import { AlertTriangle, Plus } from 'lucide-react'
+import { AlertTriangle, Plus, ScanLine } from 'lucide-react'
 import type { ExtractedVaccination, ExtractionResult, CreateRecordRequest } from '@/lib/types'
 import { useTranslations } from '@/i18n/I18nProvider'
 
 interface ExtractionReviewProps {
   result: ExtractionResult
   patientId: string
+  pageCount?: number
   onConfirm: (records: CreateRecordRequest[]) => void
+  onAddPage?: (savedExtractions: ExtractedVaccination[]) => void
   onManual: () => void
 }
 
-export function ExtractionReview({ result, patientId, onConfirm, onManual }: ExtractionReviewProps) {
+export function ExtractionReview({ result, patientId, pageCount = 1, onConfirm, onAddPage, onManual }: ExtractionReviewProps) {
   const { t } = useTranslations()
   const [extractions, setExtractions] = useState<ExtractedVaccination[]>(result.extractions)
   const [confirming, setConfirming] = useState(false)
@@ -25,20 +27,16 @@ export function ExtractionReview({ result, patientId, onConfirm, onManual }: Ext
 
   const handleChange = (index: number, updated: Partial<ExtractedVaccination>) => {
     setExtractions((prev) =>
-      prev.map((e, i) =>
-        i === index
-          ? {
-              ...e,
-              ...updated,
-              needs_review: updated.product_name_normalized !== undefined
-                ? updated.product_name_normalized === null
-                : e.needs_review,
-              review_reason: updated.product_name_normalized
-                ? null
-                : e.review_reason,
-            }
-          : e,
-      ),
+      prev.map((e, i) => {
+        if (i !== index) return e
+        const merged = { ...e, ...updated }
+        const stillNeedsReview = merged.product_name_normalized === null || merged.administration_date === null
+        return {
+          ...merged,
+          needs_review: stillNeedsReview,
+          review_reason: stillNeedsReview ? merged.review_reason : null,
+        }
+      }),
     )
   }
 
@@ -73,13 +71,20 @@ export function ExtractionReview({ result, patientId, onConfirm, onManual }: Ext
 
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="text-lg font-bold">
-          {t('extractionReview.found', { count: extractions.length })}
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          {t('extractionReview.verifyHint')}
-        </p>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-bold">
+            {t('extractionReview.found', { count: extractions.length })}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {t('extractionReview.verifyHint')}
+          </p>
+        </div>
+        {pageCount > 1 && (
+          <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+            {pageCount} pag.
+          </span>
+        )}
       </div>
 
       {result.low_confidence_count > 0 && (
@@ -124,10 +129,18 @@ export function ExtractionReview({ result, patientId, onConfirm, onManual }: Ext
         ))}
       </div>
 
-      <Button variant="outline" onClick={handleAddRow} className="w-full">
-        <Plus className="mr-2 h-4 w-4" />
-        {t('extractionReview.addRow')}
-      </Button>
+      <div className="flex gap-2">
+        <Button variant="outline" onClick={handleAddRow} className="flex-1">
+          <Plus className="mr-2 h-4 w-4" />
+          {t('extractionReview.addRow')}
+        </Button>
+        {onAddPage && (
+          <Button variant="outline" onClick={() => onAddPage(extractions)} className="flex-1">
+            <ScanLine className="mr-2 h-4 w-4" />
+            {t('scansiona.addPage')}
+          </Button>
+        )}
+      </div>
 
       <div className="flex flex-col gap-2 pt-2">
         <Button

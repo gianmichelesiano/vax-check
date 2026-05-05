@@ -17,16 +17,25 @@ import { VaccinationForm } from '@/components/vaccinations/VaccinationForm'
 import { api } from '@/lib/api'
 import { formatDate, ageLabel, sexLabel } from '@/lib/utils'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
   ArrowLeft,
   Plus,
   Activity,
   Shield,
   AlertTriangle,
   Scan,
+  Pencil,
+  Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
 import type { PatientWithRecords, ComplianceReport } from '@/lib/types'
 import { useTranslations } from '@/i18n/I18nProvider'
+import { PatientForm } from '@/components/patients/PatientForm'
 
 function MetricCard({
   label,
@@ -69,6 +78,19 @@ export default function PatientDetailPage() {
   const [analyzing, setAnalyzing] = useState(false)
   const [report, setReport] = useState<ComplianceReport | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [editSheetOpen, setEditSheetOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  const handleDelete = async () => {
+    setDeleting(true)
+    try {
+      await api.patients.delete(id)
+      router.push('/')
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   const handleAnalyze = useCallback(async () => {
     setAnalyzing(true)
@@ -128,11 +150,23 @@ export default function PatientDetailPage() {
             {patient.sex === 'F' ? t('patient.detail.femaleBorn') : t('patient.detail.bornOn')} {formatDate(patient.birth_date)}
           </p>
         </div>
+        <button
+          onClick={() => setEditSheetOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
+        >
+          <Pencil className="h-4 w-4" />
+        </button>
+        <button
+          onClick={() => setDeleteOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
       </div>
 
       <div className="flex gap-2 mb-4">
         <Link href={`/pazienti/${id}/report`} className="flex-1">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full border-orange-300 text-orange-600 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-400">
             <Activity className="h-4 w-4 mr-2" />
             {t('patient.detail.analyze')}
           </Button>
@@ -204,6 +238,39 @@ export default function PatientDetailPage() {
           onDelete={mutate}
         />
       </div>
+
+      {/* Edit Sheet */}
+      <Sheet open={editSheetOpen} onOpenChange={setEditSheetOpen}>
+        <SheetContent side="bottom" className="h-[85vh] overflow-y-auto">
+          <div className="max-w-md mx-auto">
+            <h2 className="text-lg font-bold mb-4">{t('patient.edit.title')}</h2>
+            <PatientForm
+              initialData={patient}
+              patientId={id}
+              onSuccess={() => { setEditSheetOpen(false); mutate() }}
+              onCancel={() => setEditSheetOpen(false)}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Delete Dialog */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('patient.delete.title')}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">{t('patient.delete.warning')}</p>
+          <div className="flex gap-2 pt-2">
+            <Button variant="outline" className="flex-1" onClick={() => setDeleteOpen(false)} disabled={deleting}>
+              {t('patient.delete.cancel')}
+            </Button>
+            <Button variant="destructive" className="flex-1" onClick={handleDelete} disabled={deleting}>
+              {deleting ? t('patientForm.saving') : t('patient.delete.confirm')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
